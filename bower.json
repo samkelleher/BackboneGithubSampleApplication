@@ -1,0 +1,24 @@
+{
+  "name": "BackboneGithubSampleApplication",
+  "version": "0.0.1",
+  "homepage": "https://github.com/samkelleher/BackboneGithubSampleApplication",
+  "authors": [
+    "Sam Kelleher <sam@samkelleher.com>"
+  ],
+  "description": "A sample application to display GitHub repositories using Backbone.",
+  "main": "index.html",
+  "keywords": [
+    "backbone",
+    "marionette",
+    "sample",
+    "github"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "jquery": "~2.1.3",
+    "backbone": "~1.1.2",
+    "marionette": "~2.3.1",
+    "octicons": "~2.1.2"
+  }
+}
