@@ -53,20 +53,12 @@ app.CreateQueryString = function (obj) {
     }).join('&') : '';
 };
 
-app.ApplicationLayout = Marionette.LayoutView.extend({
-    regions: {
-        content: "section.content",
-        header: "header.header",
-        footer: "section.footer"
-    },
-    template:"#template-appLayout",
-    attributes: {
-        "class":"container"
-    }
-});
-
-
 app.GlobalController = Marionette.Controller.extend({
+    initialize: function(options) {
+        if (!this.options.application) {
+            throw new Error("A controller needs a reference to the application that created it.");
+        }
+    },
     index: function () {
         console.log("render home screen");
     },
@@ -88,7 +80,6 @@ Backbone.Marionette.TemplateCache.prototype.compileTemplate = function (rawTempl
     return _.template(rawTemplate, { variable: "model" });
 };
 
-
 app.Application = Marionette.Application.extend({
     initialize: function (options) {
 
@@ -101,9 +92,27 @@ app.Application = Marionette.Application.extend({
             }
         }
 
-        this.globalRouter = new app.GlobalRouter({ controller: new app.GlobalController() });
+        this.globalRouter = new app.GlobalRouter({ controller: new app.GlobalController({application: this, session: this.model}) });
 
     },
+    stop: function() {
+        this.triggerMethod('before:stop');
+        this.removeApplicationLayout();
+        this.triggerMethod('stop');
+    },
+    removeApplicationLayout: function() {
+        if (!this.isStarted || !this.rootRegion) return;
+
+        this.rootRegion.reset();
+
+        //this.rootLayout.destroy();
+        //this.rootLayout = null;
+
+        this.rootRegion = null;
+
+        this.isStarted = false;
+    },
+    isStarted: false,
     setupApplicationLayout: function() {
         this.rootRegion = new Marionette.Region({
             el: this.options.model.get("baseContainer")
@@ -124,62 +133,61 @@ app.Application = Marionette.Application.extend({
         this.rootLayout.header.show(new app.HeaderView({model: this.options.model}));
         this.rootLayout.footer.show(new app.FooterView({model: this.options.model}));
 
-        var userLoadXhr = gitHubUser.fetch({
-            success: function() {
-                collection.fetchAllPages();
-            },
-            timeout: 10000,
-            error: function(model, response, options) {
-                console.log(arguments);
-                console.log(response);
+        var preloaded = this.model.get("preloaded");
 
-                var error = null;
+        if (!preloaded) {
+            var userLoadXhr = gitHubUser.fetch({
+                success: function() {
+                    collection.fetchAllPages();
+                },
+                timeout: 10000,
+                error: function(model, response, options) {
 
-                if (response.statusText == "timeout") {
-                    // The server did not respond...
-                    error = new app.Error({message:"The request to download profile of GitHub user '" + username + "' has timed out."});
+                    var error = null;
 
-                } else {
-                    if (response.status === 404) {
-                        // The user account does not exist...
+                    if (response.statusText == "timeout") {
+                        // The server did not respond...
+                        error = new app.Error({message:"The request to download profile of GitHub user '" + username + "' has timed out."});
 
-                        error = new app.Error({message:"The username '" + username + "' does not exist on GitHub."});
+                    } else {
+                        if (response.status === 404) {
+                            // The user account does not exist...
 
-
-                    } else  if (response.status === 403) {
-                        // Rate limit has been hit...
-
-                        error = new app.Error({message:"You have hit the API rate limit set by GitHub. Please try again later."});
+                            error = new app.Error({message:"The username '" + username + "' does not exist on GitHub."});
 
 
-                    } else  if (response.status === 500) {
-                        // API issues
-                        error = new app.Error({message:"The GitHub API returned a server error. They might be down, try again?"});
+                        } else  if (response.status === 403) {
+                            // Rate limit has been hit...
 
+                            error = new app.Error({message:"You have hit the API rate limit set by GitHub. Please try again later."});
+
+
+                        } else  if (response.status === 500) {
+                            // API issues
+                            error = new app.Error({message:"The GitHub API returned a server error. They might be down, try again?"});
+
+                        }
                     }
+
+                    if (!error) {
+                        error = new app.Error({message:"Downloading profile '" + username + "' had an unexpected error."});
+                    }
+                    that.rootLayout.content.show(new app.ContentErrorView({model: error}));
                 }
-
-                if (!error) {
-                    error = new app.Error({message:"Downloading profile '" + username + "' had an unexpected error."});
-                }
-                that.rootLayout.content.show(new app.ContentErrorView({model: error}));
-            }
-        });
-
-
+            });
+        }
     },
     onStart: function() {
         this.setupApplicationLayout();
-
+        this.isStarted = true;
     }
 });
 
-app.StartNewApplication = function(baseContainerSelector, username) {
+app.StartNewApplication = function(baseContainerSelector, username, sessionToUse) {
 
     var sessionDefaults = {
 
     };
-
 
     if (baseContainerSelector) {
         sessionDefaults.baseContainer = baseContainerSelector;
@@ -189,9 +197,18 @@ app.StartNewApplication = function(baseContainerSelector, username) {
         sessionDefaults.username = username;
     }
 
-    var application = new app.Application({model: new app.ApplicationSession(sessionDefaults)});
+    if (!sessionToUse) {
+        sessionToUse = new app.ApplicationSession(sessionDefaults);
+    }
+
+    var application = new app.Application({ model: sessionToUse });
 
     application.start({});
 
     return application;
 };
+
+if (!window.isTesting) {
+    // window.currentApp = app.StartNewApplication(null, "addyosmani");
+}
+window.currentApp = app.StartNewApplication(null, "addyosmani", app.GetSampleSession());

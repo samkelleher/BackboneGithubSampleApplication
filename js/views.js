@@ -1,5 +1,17 @@
 var app = window.app || {};
 
+app.ApplicationLayout = Marionette.LayoutView.extend({
+    regions: {
+        content: "section.content",
+        header: "header.header",
+        footer: "section.footer"
+    },
+    template:"#template-appLayout",
+    attributes: {
+        "class":"profileAppWrapper"
+    }
+});
+
 app.HeaderView = Marionette.ItemView.extend({
     template:"#template-headerView",
     attributes: {
@@ -13,8 +25,12 @@ app.HeaderView = Marionette.ItemView.extend({
         }
 
     },
+    userProfileUpdated: function() {
+
+    },
     modelEvents: {
-        "change":"sessionUpdates"
+        "change":"sessionUpdates",
+        "change:gitHubUser":"userProfileUpdated"
     },
     collectionEvents: {
         "requestAllPages":"setLoadingState",
@@ -50,11 +66,19 @@ app.HeaderView = Marionette.ItemView.extend({
         this.statusTitle = newTitle;
         this.render();
     },
-    statusTitle: "Loading...",
+    statusTitle: "",
     templateHelpers: function() {
         var extras = {
-            _statusTitle: this.statusTitle
+            _statusTitle: this.statusTitle,
+            _name: "Welcome"
         };
+
+        var gitHubUser = this.model.get("gitHubUser");
+
+        if (gitHubUser) {
+            extras._name = gitHubUser.get("name");
+            extras._avatar_url = gitHubUser.get("avatar_url");
+        }
 
         return extras;
     }
@@ -133,6 +157,19 @@ app.RepositoryListCollectionView = Marionette.CollectionView.extend({
         selectedItem: function (view, selectedItem) {
             this.trigger("selectedItem", selectedItem);
         }
+    },
+    initialize: function() {
+
+        if (this.collection.isSynced) {
+            this.trimPagesAfterFullSync();
+        }
+
+    },
+    trimPagesAfterFullSync: function() {
+        this.collection.keepFirstTwenty();
+    },
+    collectionEvents: {
+        "syncAllPages":"trimPagesAfterFullSync"
     }
 });
 

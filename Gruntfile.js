@@ -24,6 +24,7 @@ module.exports = function (grunt) {
                     specs: 'tests/unit-spec.js',
                     outfile: 'tests/UnitSpecRunner.html',
                     keepRunner: true,
+                    helpers: ['tests/helpers.js'],
                     vendor: ['bower_components/jquery/dist/jquery.js','bower_components/underscore/underscore.js','bower_components/backbone/backbone.js','bower_components/marionette/lib/backbone.marionette.js','bower_components/moment/moment.js' ]
                 }
             },

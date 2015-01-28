@@ -293,8 +293,6 @@ hr {
 .container {
     margin-right: auto;
     margin-left: auto;
-    padding-left: 15px;
-    padding-right: 15px;
 }
 @media (min-width: 768px) {
     .container {
@@ -310,12 +308,6 @@ hr {
     .container {
         width: 1170px;
     }
-}
-.container-fluid {
-    margin-right: auto;
-    margin-left: auto;
-    padding-left: 15px;
-    padding-right: 15px;
 }
 .row {
     margin-left: -15px;
