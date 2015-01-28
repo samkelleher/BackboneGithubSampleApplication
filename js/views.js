@@ -64,6 +64,13 @@ app.RepositoryListViewItem = Marionette.ItemView.extend({
     template:"#template-repositoryListViewItem",
     attributes: {
         "class":"row"
+    },
+    events: {
+        "click h3":"selectDetailedView"
+    },
+    selectDetailedView: function(e) {
+        e.preventDefault();
+        this.trigger("selectedItem", this.model);
     }
 });
 
@@ -85,6 +92,13 @@ app.FooterView = Marionette.ItemView.extend({
             extras._hasRateLimit = true;
             extras._requestLimitRemaining = requestLimitRemaining;
             extras._requestLimit = requestLimit;
+
+            var timeLeft = moment.duration(-moment.utc().diff(requestLimitExpires));
+
+            extras._secondsLeft = timeLeft.asSeconds();
+            extras._minutesLeft = timeLeft.asMinutes();
+            extras._humanizeLeft = timeLeft.humanize(true);
+
             extras._resetsAt = requestLimitExpires.format("h:mma");
         }
 
@@ -114,5 +128,14 @@ app.RepositoryListViewItem = Marionette.ItemView.extend({
 });
 
 app.RepositoryListCollectionView = Marionette.CollectionView.extend({
-    childView: app.RepositoryListViewItem
+    childView: app.RepositoryListViewItem,
+    childEvents: {
+        selectedItem: function (view, selectedItem) {
+            this.trigger("selectedItem", selectedItem);
+        }
+    }
+});
+
+app.RepositoryDetailsView =  Marionette.ItemView.extend({
+    template:"#template-repositoryDetailsView"
 });

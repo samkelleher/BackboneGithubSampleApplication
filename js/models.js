@@ -373,32 +373,33 @@ app.RepositoryCollection = Backbone.Collection.extend({
 
                     var subsequentPageLoads = [];
 
-                    for (var subsequentPageNumber = 2; subsequentPageNumber <= paginationInfomation.totalPages; subsequentPageNumber++) {
+                    var queueNextFetch = function(nextPageNumber) {
                         var fetchLoader = new $.Deferred();
-                        subsequentPageLoads.push(fetchLoader.promise());
-                        var thisPageNumber = subsequentPageNumber;
                         var subsequentPageXhr = that.fetch({
                             remove: false,
-                            data: { page: subsequentPageNumber },
+                            data: { page: nextPageNumber },
                             error: function(collection, response, options) {
-                                requestError(collection, response, options, thisPageNumber);
+                                requestError(collection, response, options, nextPageNumber);
                                 fetchLoader.reject();
                             },
                             success: function(collection, response, options) {
-                                updateProgress(response, thisPageNumber);
+                                updateProgress(response, nextPageNumber);
                                 fetchLoader.resolve();
-                                console.log("resolved page ", thisPageNumber);
                             }
                         });
+                        return fetchLoader.promise();
+                    };
+
+                    for (var subsequentPageNumber = 2; subsequentPageNumber <= paginationInfomation.totalPages; subsequentPageNumber++) {
+                        subsequentPageLoads.push(queueNextFetch(subsequentPageNumber));
                     }
 
                     $.when.apply(null, subsequentPageLoads).done(function() {
                         // All pages have  been loaded.
-                        console.log("finished all fetches");
                         syncAllPages();
                     }).fail(function() {
                         // At least one pagination call failed...
-                        console.log("// At least one pagination call failed...");
+
                     });
 
                 } else {
