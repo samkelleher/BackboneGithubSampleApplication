@@ -1,19 +1,22 @@
+"use strict";
 var app = window.app || {};
 
 app.ApplicationSession = Backbone.Model.extend({
-
-    defaults: {
-        username:"samkelleher",
-        repositories: null,
-        gitHubUser: null,
-        totalRepositories: null,
-        requestLimit: null,
-        requestLimitRemaining:null,
-        requestLimitExpires: null, // < Intented to be a DateTime/moment
-        requestLimitReset: null, // < Intented to be the unix EPOCH.
-        lastRefreshed: null,
-        baseContainer:"#appContainer",
-        totalRepositoryCount: null
+    defaults: function() {
+        return {
+            username:"samkelleher",
+            repositories: null,
+            gitHubUser: null,
+            totalRepositories: null,
+            requestLimit: null,
+            requestLimitRemaining:null,
+            requestLimitExpires: null, // < Intented to be a DateTime/moment
+            requestLimitReset: null, // < Intented to be the unix EPOCH.
+            lastRefreshed: null,
+            baseContainer:"#appContainer",
+            totalRepositoryCount: null,
+            rateLimit: new app.RateLimit()
+        };
     },
     validate: function(attributes, options) {
         if (!attributes) {
@@ -33,16 +36,13 @@ app.ApplicationSession = Backbone.Model.extend({
         var gitHubUser = new app.GitHubUser({login: this.get("username")});
         this.set("gitHubUser", gitHubUser);
 
-        var repositories = new app.RepositoryCollection([], {username: this.get("username"), owner: this});
+        var repositories = new app.RepositoryCollection([], {gitHubUser: gitHubUser, owner: this});
         this.set("repositories", repositories);
 
-        this.listenTo(gitHubUser, "rateLimitUpdated", this.updateRequestLimits);
-        this.listenTo(repositories, "rateLimitUpdated", this.updateRequestLimits);
+        var rateLimit = this.get("rateLimit");
+        rateLimit.observeRateLimitedObject(repositories);
+        rateLimit.observeRateLimitedObject(gitHubUser);
 
-    },
-    updateRequestLimits: function(fetchResult) {
-        this.trigger("rateLimitUpdated", fetchResult);
-        this.set(fetchResult);
     }
 });
 
@@ -145,22 +145,28 @@ app.Error = Backbone.Model.extend({
     }
 });
 
-app.GitHubUser = Backbone.Model.extend({
+app.RateLimit = Backbone.Model.extend({
     defaults: {
-        name:"",
-        login:"" // < This is the username, but for this endpoint only, it's called login instead.
+        requestLimit: null,
+        requestLimitRemaining:null,
+        requestLimitExpires: null, // < Intented to be a DateTime/moment
+        requestLimitReset: null // < Intented to be the unix EPOCH.
     },
-    url: function() {
-        var login = this.get("login");
+    triggerRateLimitUpdate: function(requestLimit, requestLimitRemaining, requestLimitReset) {
+        if (requestLimit !== null || requestLimitRemaining !== null || requestLimitReset !== null) {
+            var fetchResult = {
+                requestLimit: requestLimit,
+                requestLimitRemaining:requestLimitRemaining,
+                requestLimitReset: requestLimitReset,
+                requestLimitExpires: moment.unix(requestLimitReset)
+            };
 
-        if (!login) {
-            throw new Error("Cannot get a users profile without their username.");
+            this.set(fetchResult);
+            this.trigger("rateLimitUpdated", fetchResult);
         }
-
-        return "https://api.github.com/users/" + login;
     },
-    processRateLimits: function(xhr) {
-        // TODO: Merge these into a common function for models and collections.
+    processLimitsFromXHR: function(xhr) {
+
         if (!xhr) return;
 
         var requestLimit = xhr.getResponseHeader('X-RateLimit-Limit');
@@ -179,16 +185,31 @@ app.GitHubUser = Backbone.Model.extend({
             requestLimitReset  = requestLimitReset * 1;
         }
 
-        if (requestLimit !== null || requestLimitRemaining !== null || requestLimitReset !== null) {
-            var fetchResult = {
-                requestLimit: requestLimit,
-                requestLimitRemaining:requestLimitRemaining,
-                requestLimitReset: requestLimitReset,
-                requestLimitExpires: moment.unix(requestLimitReset)
-            };
+        this.triggerRateLimitUpdate(requestLimit, requestLimitRemaining, requestLimitReset);
 
-            this.trigger("rateLimitUpdated", fetchResult);
+    },
+    observeRateLimitedObject: function(obj) {
+        this.listenTo(obj, "rateLimitedXHRComplete", this.processLimitsFromXHR);
+    }
+});
+
+app.GitHubUser = Backbone.Model.extend({
+    defaults: {
+        name:"",
+        login:"" // < This is the username, but for this endpoint only, it's called login instead.
+    },
+    url: function() {
+        var login = this.get("login");
+
+        if (!login) {
+            throw new Error("Cannot get a users profile without their username.");
         }
+
+        return "https://api.github.com/users/" + login;
+    },
+    processRateLimits: function(xhr) {
+        if (!xhr) return;
+        this.trigger("rateLimitedXHRComplete", xhr);
     },
     fetch: function(options) {
         options = options ? _.clone(options) : {};
@@ -213,11 +234,8 @@ app.GitHubUser = Backbone.Model.extend({
 
 app.RepositoryCollection = Backbone.Collection.extend({
     url: function() {
-        if (!this.options || !this.options.username) {
-            throw new Error("A username is required to fetch a RepositoryCollection.");
-        }
-
-        return "https://api.github.com/users/" + this.options.username + "/repos?type=all&per_page=" + this.options.perPage;
+        var username = this.options.gitHubUser.get("login");
+        return "https://api.github.com/users/" + username + "/repos?type=all&per_page=" + this.options.perPage;
     },
     initialize: function(models, options) {
 
@@ -227,8 +245,8 @@ app.RepositoryCollection = Backbone.Collection.extend({
 
         this.options = options;
 
-        if (!this.options.owner) {
-            throw new Error("A RepositoryCollection requires an owner to be set in its options.");
+        if (!this.options.gitHubUser) {
+            throw new Error("A RepositoryCollection requires an owner (a GitHubUser object) to be set in its options.");
         }
 
         if (!this.options.perPage) {
@@ -241,33 +259,7 @@ app.RepositoryCollection = Backbone.Collection.extend({
     currentXhr: null,
     processRateLimits: function(xhr) {
         if (!xhr) return;
-
-        var requestLimit = xhr.getResponseHeader('X-RateLimit-Limit');
-        var requestLimitRemaining = xhr.getResponseHeader('X-RateLimit-Remaining');
-        var requestLimitReset = xhr.getResponseHeader('X-RateLimit-Reset');
-
-        if (requestLimit !== null) {
-            requestLimit  = requestLimit * 1;
-        }
-
-        if (requestLimitRemaining !== null) {
-            requestLimitRemaining  = requestLimitRemaining * 1;
-        }
-
-        if (requestLimitReset !== null) {
-            requestLimitReset  = requestLimitReset * 1;
-        }
-
-        if (requestLimit !== null || requestLimitRemaining !== null || requestLimitReset !== null) {
-            var fetchResult = {
-                requestLimit: requestLimit,
-                requestLimitRemaining:requestLimitRemaining,
-                requestLimitReset: requestLimitReset,
-                requestLimitExpires: moment.unix(requestLimitReset)
-            };
-
-            this.trigger("rateLimitUpdated", fetchResult);
-        }
+        this.trigger("rateLimitedXHRComplete", xhr);
     },
     parseLinkHeader: function(header, currentPage) {
 
@@ -279,7 +271,7 @@ app.RepositoryCollection = Backbone.Collection.extend({
 
 
         if (!header || header.length == 0) {
-           return {totalPages: currentPage};
+            return {totalPages: currentPage};
         }
 
         // Split parts by comma
@@ -308,12 +300,12 @@ app.RepositoryCollection = Backbone.Collection.extend({
         return links;
 
     },
-    processLinkResponse: function(xhr) {
+    processLinkResponse: function(xhr, currentPage) {
         if (!xhr) return;
 
         var requestLink = xhr.getResponseHeader('Link');
 
-        return this.parseLinkHeader(requestLink);
+        return this.parseLinkHeader(requestLink, currentPage);
 
     },
     fetch: function(options) {
@@ -345,71 +337,80 @@ app.RepositoryCollection = Backbone.Collection.extend({
     fetchAllPages: function() {
 
         var that = this;
+        var paginationInfomation = null;
         var pagesFetched = 1;
         var totalItemsLoaded = 0;
-        var hasMorePages = true;
         this.trigger("requestAllPages", this);
 
         var syncAllPages = function() {
-            this.trigger("syncAllPages", this, {
+            that.trigger("syncAllPages", {
                 pagesFetched: pagesFetched,
                 totalItemsLoaded: totalItemsLoaded
             });
         };
 
-        var performFetch = function(doNextFetch) {
-            that.currentXhr = that.fetch({
-                remove: false,
-                data: {page: currentPage},
-                success: function(collection, response, options) {
-                    that.currentXhr = null;
-
-                    var itemsLoaded = response.length;
-                    totalItemsLoaded += itemsLoaded;
-
-                    var paginationInfomation = that.processLinkResponse(response, pagesFetched);
-
-                    that.trigger("requestAllPagesProgress", this, { totalRepositoryCount: totalItemsLoaded, currentPage: 1, totalPages: paginationInfomation.totalPages });
-
-                    if (paginationInfomation.totalPages > 1) {
-
-                    } else {
-                        syncAllPages();
-                    }
-
-                    // Start paralel requests for each page, if any.
-                    for (var subsequentPageNumber = 2; subsequentPageNumber <= paginationInfomation.totalPages; subsequentPageNumber++) {
-
-                        var subsequentPageXhr = that.fetch({
-                            remove: false,
-                            data: {page: subsequentPageNumber}
-                        });
-
-                    }
-
-                    if (itemsLoaded == that.options.perPage) {
-                        // Load the next page
-                        currentPage += 1;
-
-                        doNextFetch(doNextFetch);
-                    } else {
-                        // There are no items left.
-                        hasMorePages=false;
-                        that.trigger("syncAllPages", this, {
-                            pagesFetched: currentPage,
-                            totalItemsLoaded: totalItemsLoaded
-                        });
-                    }
-
-                },
-                error: function(collection, response, options) {
-                    that.currentXhr = null;
-                    that.trigger("requestAllPagesError", this, { totalRepositoryCount: totalItemsLoaded, response: response });
-                }});
-
+        var requestError = function(collection, response, options, page) {
+            that.trigger("requestAllPagesError", { totalItemsLoaded: totalItemsLoaded, response: response, page: page });
         };
 
-        performFetch(performFetch);
+        var updateProgress = function(fetchResults, fetchPage) {
+            totalItemsLoaded += fetchResults.length;
+            that.trigger("requestAllPagesProgress", { totalRepositoryCount: totalItemsLoaded, currentPage: fetchPage, totalPages: paginationInfomation.totalPages });
+        };
+
+        that.currentXhr = that.fetch({
+            remove: false,
+            data: {page: pagesFetched},
+            success: function(collection, response, options) {
+                that.currentXhr = null;
+                paginationInfomation = that.processLinkResponse(options.xhr, pagesFetched);
+
+                updateProgress(response, pagesFetched);
+
+                if (paginationInfomation.totalPages > pagesFetched) {
+                    // There are other repos to load
+                    // Start paralel requests for each page, if any.
+
+                    var subsequentPageLoads = [];
+
+                    for (var subsequentPageNumber = 2; subsequentPageNumber <= paginationInfomation.totalPages; subsequentPageNumber++) {
+                        var fetchLoader = new $.Deferred();
+                        subsequentPageLoads.push(fetchLoader.promise());
+                        var thisPageNumber = subsequentPageNumber;
+                        var subsequentPageXhr = that.fetch({
+                            remove: false,
+                            data: { page: subsequentPageNumber },
+                            error: function(collection, response, options) {
+                                requestError(collection, response, options, thisPageNumber);
+                                fetchLoader.reject();
+                            },
+                            success: function(collection, response, options) {
+                                updateProgress(response, thisPageNumber);
+                                fetchLoader.resolve();
+                                console.log("resolved page ", thisPageNumber);
+                            }
+                        });
+                    }
+
+                    $.when.apply(null, subsequentPageLoads).done(function() {
+                        // All pages have  been loaded.
+                        console.log("finished all fetches");
+                        syncAllPages();
+                    }).fail(function() {
+                        // At least one pagination call failed...
+                        console.log("// At least one pagination call failed...");
+                    });
+
+                } else {
+                    // This is the only page of repos.
+                    syncAllPages();
+                }
+
+            },
+            error: function(collection, response, options) {
+                that.currentXhr = null;
+                requestError(collection, response, options, 1);
+            }});
 
     },
     model: app.Repository

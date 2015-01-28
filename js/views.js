@@ -12,17 +12,11 @@ app.HeaderView = Marionette.ItemView.extend({
             throw new Error("The header view requires access to the underlying collection to function.");
         }
 
-        //this.listenTo(this.collection, "request",this.collectionIsLoading)
-
-    },
-    collectionRequest: function() {
-        console.log("collectionIsLoading");
     },
     modelEvents: {
         "change":"sessionUpdates"
     },
     collectionEvents: {
-        "request":"collectionRequest",
         "requestAllPages":"setLoadingState",
         "requestAllPagesProgress":"setLoadingStateWithProgress",
         "syncAllPages":"updateStatus"
@@ -48,7 +42,7 @@ app.HeaderView = Marionette.ItemView.extend({
         }
 
     },
-    setLoadingStateWithProgress: function(collection, progress) {
+    setLoadingStateWithProgress: function(progress) {
         var username = this.model.get("username");
         this.setStatusTitle("Loading @" + username + ", " + progress.totalRepositoryCount + " loaded so far...");
     },
@@ -83,12 +77,14 @@ app.FooterView = Marionette.ItemView.extend({
             _hasRateLimit: false
         };
 
-        var requestLimitRemaining = this.model.get("requestLimitRemaining");
-        var requestLimit = this.model.get("requestLimit");
-        var requestLimitExpires = this.model.get("requestLimitExpires");
+        var requestLimitRemaining = this.rateLimit.get("requestLimitRemaining");
+        var requestLimit = this.rateLimit.get("requestLimit");
+        var requestLimitExpires = this.rateLimit.get("requestLimitExpires");
 
         if (requestLimitRemaining !== null && requestLimit !== null) {
             extras._hasRateLimit = true;
+            extras._requestLimitRemaining = requestLimitRemaining;
+            extras._requestLimit = requestLimit;
             extras._resetsAt = requestLimitExpires.format("h:mma");
         }
 
@@ -97,8 +93,9 @@ app.FooterView = Marionette.ItemView.extend({
     updatedRateLimit: function() {
         this.render();
     },
-    modelEvents: {
-        "rateLimitUpdated":"updatedRateLimit"
+    initialize: function() {
+        this.rateLimit = this.model.get("rateLimit");
+        this.listenTo(this.rateLimit, "rateLimitUpdated", this.updatedRateLimit);
     }
 });
 
