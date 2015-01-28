@@ -1,7 +1,7 @@
 var app = window.app || {};
 
 app.GetSampleSession = function() {
-    var session = new app.ApplicationSession({username: "addyosmani", preloaded: true});
+    var session = new app.ApplicationSession({username: "addyosmani", preloaded: true, singleInstance: true});
 
     session.get("gitHubUser").set({
         "login": "addyosmani",

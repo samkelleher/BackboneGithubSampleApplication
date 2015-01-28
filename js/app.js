@@ -58,82 +58,32 @@ app.GlobalController = Marionette.Controller.extend({
         if (!this.options.application) {
             throw new Error("A controller needs a reference to the application that created it.");
         }
+        this.application = this.options.application;
+
+        if (!this.options.session) {
+            throw new Error("A controller needs a reference to the session that it is running in.");
+        }
+        this.session = this.options.session;
     },
     index: function () {
-        console.log("render home screen");
-    },
-    defaultAction: function (path) {
-        console.log("UNKNOWN PATH:", path);
-        //window.location = "/" + path;
-    }
-});
 
-app.GlobalRouter = Marionette.AppRouter.extend({
-    appRoutes: {
-        "": "index",
-        "*path": "defaultAction"
-    }
-});
+        var that = this;
+        this.application.router.navigate("index.html");
+        var username = this.session.get("username");
+        var collection =  this.session.get("repositories");
+        var gitHubUser = this.session.get("gitHubUser");
 
-Backbone.Marionette.TemplateCache.prototype.compileTemplate = function (rawTemplate) {
-    // Add a model attribute for performance.
-    return _.template(rawTemplate, { variable: "model" });
-};
+        var listView = new app.RepositoryListCollectionView({collection: collection, model: this.session});
 
-app.Application = Marionette.Application.extend({
-    initialize: function (options) {
-
-        if (!this.options || !this.options.model) {
-
-            throw new Error("An application needs a session object to be able to run.");
-
-            if (!this.options.model.isValid()) {
-                throw new Error(this.options.model.validationError);
-            }
-        }
-
-        this.globalRouter = new app.GlobalRouter({ controller: new app.GlobalController({application: this, session: this.model}) });
-
-    },
-    stop: function() {
-        this.triggerMethod('before:stop');
-        this.removeApplicationLayout();
-        this.triggerMethod('stop');
-    },
-    removeApplicationLayout: function() {
-        if (!this.isStarted || !this.rootRegion) return;
-
-        this.rootRegion.reset();
-
-        //this.rootLayout.destroy();
-        //this.rootLayout = null;
-
-        this.rootRegion = null;
-
-        this.isStarted = false;
-    },
-    isStarted: false,
-    setupApplicationLayout: function() {
-        this.rootRegion = new Marionette.Region({
-            el: this.options.model.get("baseContainer")
+        this.listenToOnce(listView, "selectedItem", function(selectedItem) {
+            that.viewRepositoryDetail(selectedItem);
         });
 
-        this.rootLayout = new app.ApplicationLayout();
+        this.application.rootLayout.content.show(listView);
+        this.application.rootLayout.header.show(new app.HeaderView({model: this.session }));
+        this.application.rootLayout.footer.show(new app.FooterView({model: this.session }));
 
-        this.rootRegion.show( this.rootLayout );
-
-        // TODO: Move this to the controller...
-        var that = this;
-
-        var username = this.options.model.get("username");
-        var collection =  this.options.model.get("repositories");
-        var gitHubUser = this.options.model.get("gitHubUser");
-
-        this.rootLayout.content.show(new app.RepositoryListCollectionView({collection: collection, model: this.options.model}));
-        this.rootLayout.header.show(new app.HeaderView({model: this.options.model}));
-        this.rootLayout.footer.show(new app.FooterView({model: this.options.model}));
-
-        var preloaded = this.model.get("preloaded");
+        var preloaded = this.session.get("preloaded");
 
         if (!preloaded) {
             var userLoadXhr = gitHubUser.fetch({
@@ -172,13 +122,115 @@ app.Application = Marionette.Application.extend({
                     if (!error) {
                         error = new app.Error({message:"Downloading profile '" + username + "' had an unexpected error."});
                     }
-                    that.rootLayout.content.show(new app.ContentErrorView({model: error}));
+                    that.application.rootLayout.content.show(new app.ContentErrorView({model: error}));
                 }
             });
         }
+
+    },
+    viewRepositoryDetail: function(repository) {
+        this.application.router.navigate("repository/" + repository.id);
+        this.application.rootLayout.content.show(new app.RepositoryDetailsView({model: repository, session: this.session}));
+    },
+    viewRepositoryDetailById: function(id) {
+
+        var repository = this.session.get("repositories").get("id");
+
+        if (!repository) {
+            this.application.router.navigate("repository/" + id);
+            this.application.rootLayout.content.show(new app.ContentErrorView({model: new app.Error({message:"A repository with id '" + id + "' was not found."})}));
+            return;
+        }
+
+        this.viewRepositoryDetail(repository);
+
+    },
+    defaultAction: function (path) {
+        console.log("UNKNOWN PATH:", path);
+        //window.location = "/" + path;
+    }
+});
+
+app.GlobalRouter = Marionette.AppRouter.extend({
+    appRoutes: {
+        "": "index",
+        "index.html": "index",
+        "repository/:id":"viewRepositoryDetailById",
+        "*path": "defaultAction"
+    }
+});
+
+Backbone.Marionette.TemplateCache.prototype.compileTemplate = function (rawTemplate) {
+    // Add a model attribute for performance.
+    return _.template(rawTemplate, { variable: "model" });
+};
+
+app.Application = Marionette.Application.extend({
+    initialize: function (options) {
+
+        if (!this.options) {
+            throw new Error("An application needs a session object to be able to run.");
+        }
+
+        if (!this.options.model) {
+
+            throw new Error("An application needs a session object to be able to run.");
+
+            if (!this.options.model.isValid()) {
+                throw new Error(this.options.model.validationError);
+            }
+        }
+
+        if (this.options.singleInstance) {
+            if (app.current && app.current.isStarted) {
+                throw new Error("Another instance has already been started, cannot start another.");
+            }
+            app.currentSingleInstance = this;
+        }
+
+        this.router = new app.GlobalRouter({ controller: new app.GlobalController({application: this, session: this.model}) });
+
+    },
+    stop: function() {
+        this.triggerMethod('before:stop');
+        this.removeApplicationLayout();
+        this.stopPushState();
+        this.triggerMethod('stop');
+    },
+    removeApplicationLayout: function() {
+        if (!this.isStarted || !this.rootRegion) return;
+
+        this.rootRegion.reset();
+
+        //this.rootLayout.destroy();
+        //this.rootLayout = null;
+
+        this.rootRegion = null;
+
+        this.isStarted = false;
+    },
+    isStarted: false,
+    setupApplicationLayout: function() {
+        this.rootRegion = new Marionette.Region({
+            el: this.options.model.get("baseContainer")
+        });
+
+        this.rootLayout = new app.ApplicationLayout();
+
+        this.rootRegion.show( this.rootLayout );
+
+    },
+    historyStarted: false,
+    setupPushState: function() {
+        this.historyStarted = Backbone.history.start({ pushState: this.model.get("singleInstance"), root: "BackboneGithubSampleApplication/" });
+    },
+    stopPushState: function() {
+        this.historyStarted = false;
+        Backbone.history.stop();
     },
     onStart: function() {
         this.setupApplicationLayout();
+        this.setupPushState();
         this.isStarted = true;
     }
 });
@@ -186,7 +238,7 @@ app.Application = Marionette.Application.extend({
 app.StartNewApplication = function(baseContainerSelector, username, sessionToUse) {
 
     var sessionDefaults = {
-
+        singleInstance: true
     };
 
     if (baseContainerSelector) {

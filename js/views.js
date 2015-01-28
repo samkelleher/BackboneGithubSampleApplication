@@ -41,11 +41,10 @@ app.HeaderView = Marionette.ItemView.extend({
         "title":"h2"
     },
     sessionUpdates: function() {
-        console.log("session updated ", this.model.toJSON());
+        //console.log("session updated ", this.model.toJSON());
     },
     updateStatus: function() {
-        var username = this.model.get("username");
-        this.setStatusTitle(username);
+        this.setStatusTitle("");
     },
     setLoadingState: function() {
 
@@ -59,8 +58,7 @@ app.HeaderView = Marionette.ItemView.extend({
 
     },
     setLoadingStateWithProgress: function(progress) {
-        var username = this.model.get("username");
-        this.setStatusTitle("Loading @" + username + ", " + progress.totalRepositoryCount + " loaded so far...");
+        this.setStatusTitle("Loading (" + progress.totalRepositoryCount + " loaded so far)...");
     },
     setStatusTitle: function(newTitle) {
         this.statusTitle = newTitle;
@@ -90,7 +88,7 @@ app.RepositoryListViewItem = Marionette.ItemView.extend({
         "class":"row"
     },
     events: {
-        "click h3":"selectDetailedView"
+        "click":"selectDetailedView"
     },
     selectDetailedView: function(e) {
         e.preventDefault();
@@ -139,13 +137,6 @@ app.FooterView = Marionette.ItemView.extend({
 
 app.ContentErrorView = Marionette.ItemView.extend({
     template:"#template-contentErrorView",
-    attributes: {
-        "class":"row"
-    }
-});
-
-app.RepositoryListViewItem = Marionette.ItemView.extend({
-    template:"#template-repositoryListViewItem",
     attributes: {
         "class":"row"
     }

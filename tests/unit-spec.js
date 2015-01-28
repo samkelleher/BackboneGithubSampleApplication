@@ -91,3 +91,41 @@ describe("Calculate repository statstics.", function() {
     });*/
 
 });
+
+describe("Calculate repository statstics.", function() {
+
+    var repositoryLanguageDetails = new app.RepositoryLanguageDetails().setLanguageObject({
+        "C": 3,
+        "Python": 3,
+        "Swift":3
+    });
+
+    var languageArray = repositoryLanguageDetails.get("languageData");
+
+    it("Can process preset language data.", function() {
+        expect(languageArray).not.toBe(undefined);
+        expect(languageArray).not.toBe(null);
+    });
+
+    it("Returns the correct number of languages.", function() {
+        expect(languageArray.length).toBe(3);
+    });
+
+    // None of my hacking could get them to add to 100.
+    /*var totalPercentage = 0;
+
+     var percentageValues = _.pluck(languageArray, "percentage");
+     console.log(languageArray);
+     console.log(percentageValues[0]);
+
+     for (var i = 0; i < percentageValues.length; i++) {
+     totalPercentage += percentageValues[i]
+     }
+
+     console.log(totalPercentage);
+
+     it("An odd number of percentage still adds up to 100.", function() {
+     expect(totalPercentage).toBe(100);
+     });*/
+
+});
