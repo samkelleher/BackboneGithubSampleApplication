@@ -134,7 +134,7 @@ app.GlobalController = Marionette.Controller.extend({
     },
     viewRepositoryDetailById: function(id) {
 
-        var repository = this.session.get("repositories").get("id");
+        var repository = this.session.get("repositories").get(id);
 
         if (!repository) {
             this.application.router.navigate("repository/" + id);

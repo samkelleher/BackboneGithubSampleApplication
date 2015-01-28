@@ -47,8 +47,9 @@ section.content h3 {
 }
 
 section.content .row {
-    padding-top: 7px;
-    padding-bottom: 8px;
+    padding-top: 8px;
+    padding-bottom: 7px;
+    border-bottom: solid 1px #f3f3ed;
 }
 
 section.content .row:hover {
