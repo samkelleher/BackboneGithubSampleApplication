@@ -19,6 +19,11 @@
     "jquery": "~2.1.3",
     "backbone": "~1.1.2",
     "marionette": "~2.3.1",
-    "octicons": "~2.1.2"
+    "octicons": "~2.1.2",
+    "moment": "~2.9.0",
+    "underscore": "~1.7.0"
+  },
+  "resolutions": {
+    "underscore": "~1.7.0"
   }
 }
