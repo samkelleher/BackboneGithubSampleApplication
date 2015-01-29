@@ -178,7 +178,7 @@ app.GlobalController = Marionette.Controller.extend({
         var detailsView = new app.RepositoryDetailsLayout({model: repository, session: this.session});
 
         this.listenToOnce(detailsView, "goHome", function(selectedItem) {
-            that.indexWithoutFetch();
+            that.repoList();
         });
 
         this.application.rootLayout.content.show(detailsView);
