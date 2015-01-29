@@ -242,6 +242,13 @@ app.RepositoryDetailsLayout =  Marionette.LayoutView.extend({
         repoDetailsSummaryHeaderContainer: ".repoDetailsSummaryHeaderContainer",
         repoDetailsLanguagesContainer: ".repoDetailsLanguagesContainer"
     },
+    events: {
+        "click .cmdGoHome":"cmdGoHome"
+    },
+    cmdGoHome: function(e) {
+        e.preventDefault();
+        this.trigger("goHome");
+    },
     onShow: function() {
         this.repoDetailsSummaryHeaderContainer.show(new app.RepositoryDetailsView({model: this.model, session: this.options.session}));
 

@@ -65,13 +65,12 @@ app.GlobalController = Marionette.Controller.extend({
         }
         this.session = this.options.session;
     },
-    index: function () {
-
+    indexWithoutFetch: function() {
         var that = this;
+
         this.application.router.navigate("index.html");
-        var username = this.session.get("username");
+
         var collection =  this.session.get("repositories");
-        var gitHubUser = this.session.get("gitHubUser");
 
         var listView = new app.RepositoryListCollectionView({collection: collection, model: this.session});
 
@@ -83,6 +82,14 @@ app.GlobalController = Marionette.Controller.extend({
         this.application.rootLayout.header.show(new app.HeaderView({model: this.session }));
         this.application.rootLayout.footer.show(new app.FooterView({model: this.session }));
 
+    },
+    index: function () {
+        this.indexWithoutFetch();
+        var that = this;
+
+        var username = this.session.get("username");
+        var collection =  this.session.get("repositories");
+        var gitHubUser = this.session.get("gitHubUser");
         var preloaded = this.session.get("preloaded");
 
         if (!preloaded) {
@@ -129,8 +136,16 @@ app.GlobalController = Marionette.Controller.extend({
 
     },
     viewRepositoryDetail: function(repository) {
+        var that = this;
         this.application.router.navigate("repository/" + repository.id);
-        this.application.rootLayout.content.show(new app.RepositoryDetailsLayout({model: repository, session: this.session}));
+
+        var detailsView = new app.RepositoryDetailsLayout({model: repository, session: this.session});
+
+        this.listenToOnce(detailsView, "goHome", function(selectedItem) {
+            that.indexWithoutFetch();
+        });
+
+        this.application.rootLayout.content.show(detailsView);
     },
     viewRepositoryDetailById: function(id) {
 

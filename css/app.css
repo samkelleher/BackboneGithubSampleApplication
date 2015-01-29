@@ -24,6 +24,7 @@ body {
 .repoLanguagesContainer {
 background-color: #f3f3ed;
     padding: 15px;
+    margin-bottom: 15px;
 }
 
 .repoLanguagesContainer .languageTitle {
@@ -89,6 +90,11 @@ section.content h3 {
 
 body {
     background-color: #f3f3ed;
+}
+
+a, a:visited {
+    color: #95b85e;
+    text-decoration: none;
 }
 
 .repoListCollectionContainer .row {
