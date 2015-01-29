@@ -1,2 +1,2 @@
-# BackboneGithubSampleApplication
-A sample application written with Backbone to list a users public repositories on GitHub.
+# Please switch branch.
+This is a branch for screenshots only. Please switch to the `gh-pages` branch for the main code.
