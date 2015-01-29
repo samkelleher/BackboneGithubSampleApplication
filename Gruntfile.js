@@ -23,6 +23,7 @@ module.exports = function (grunt) {
                 options: {
                     specs: 'tests/unit-spec.js',
                     outfile: 'tests/UnitSpecRunner.html',
+                    template:'tests/SpecRunnerTemplate.html',
                     keepRunner: true,
                     helpers: ['tests/helpers.js'],
                     vendor: ['bower_components/jquery/dist/jquery.js','bower_components/underscore/underscore.js','bower_components/backbone/backbone.js','bower_components/marionette/lib/backbone.marionette.js','bower_components/moment/moment.js' ]
@@ -33,6 +34,8 @@ module.exports = function (grunt) {
                 options: {
                     specs: 'tests/integration-spec.js',
                     outfile: 'tests/IntegrationSpecRunner.html',
+                    template:'tests/SpecRunnerTemplate.html',
+                    helpers: ['tests/helpers.js'],
                     keepRunner: true,
                     vendor: ['bower_components/jquery/dist/jquery.js','bower_components/underscore/underscore.js','bower_components/backbone/backbone.js','bower_components/marionette/lib/backbone.marionette.js','bower_components/moment/moment.js' ]
                 }
@@ -65,9 +68,11 @@ module.exports = function (grunt) {
         },
         clean: ["js/full.debug.js"],
         copy: {
-            notfound: {
-                src: 'index.html',
-                dest: '404.html'
+            main: {
+                files: [
+                    {src: ['.grunt/grunt-contrib-jasmine/*'], dest: 'tests/jasmine/', flatten: true, filter: 'isFile', expand: true },
+                    {src: 'index.html', dest: '404.html'}
+                ]
             }
         }
     });

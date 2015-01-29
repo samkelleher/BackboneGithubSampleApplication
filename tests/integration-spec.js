@@ -8,7 +8,11 @@ describe("Connects directly to the GitHub API.", function() {
     });
 
     it("Will download the list of repositories for a user from github API.", function(done) {
-        var repos = new app.RepositoryCollection([], {username: "samkelleher"});
+        var repos = new app.RepositoryCollection([], {gitHubUser: {
+            get: function() {
+                return "github";
+            }
+        }});
 
         var fetchCompleteFunctions = {
             success: function() {
@@ -43,7 +47,11 @@ describe("Connects directly to the GitHub API.", function() {
 
     it("Will handle a username that does not exist.", function(done) {
         var dummyUsername = moment().format("x");
-        var repos = new app.RepositoryCollection([], {username: dummyUsername});
+        var repos = new app.RepositoryCollection([], {gitHubUser: {
+            get: function() {
+                return dummyUsername;
+            }
+        }});
 
         var fetchCompleteFunctions = {
             success: function() {

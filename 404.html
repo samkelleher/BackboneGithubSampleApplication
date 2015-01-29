@@ -1,6 +1,3 @@
----
-permalink: /404.html
----
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -100,13 +97,14 @@ permalink: /404.html
 <script type="text/template" id="template-usageInstructionsView">
     <div class="row">
         <div class="col-xs-12">
-            <p>To use this app, you can specify the user profile you want to view by entering their name into the URL address bar.</p>
+            <p>To use this app, pick a user to view or enter a username to locate.</p>
             <p>Here are some examples profiles:</p>
             <ul>
                 <li><a class="cmdViewUser" href="user/samkelleher">Sam Kelleher</a> (who wrote this sample app).</li>
                 <li><a class="cmdViewUser" href="user/addyosmani">Addy Osmani</a> (has <i>lots</i> of repositories and demonstrates paging and filtering).</li>
                 <li><a class="cmdViewUser" href="user/sample">Sample Data</a> (which doesn't make any API calls).</li>
                 <li><a class="cmdViewUser" href="user/sdfouheyf092jefdg">Non-Existant User</a> (tests error handling for a user that doesn't exist).</li>
+                <li><input type="text" class="txtSearchUsername" placeholder="Enter github username..." /> <button class="cmdSearch">View</button>.</li>
             </ul>
         </div>
     </div>
