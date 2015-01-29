@@ -65,10 +65,10 @@ app.GlobalController = Marionette.Controller.extend({
         }
         this.session = this.options.session;
     },
-    indexWithoutFetch: function() {
+    repoList: function() {
         var that = this;
 
-        this.application.router.navigate("index.html");
+        this.application.router.navigate("user/"+ this.session.get("username"));
 
         var collection =  this.session.get("repositories");
 
@@ -84,60 +84,96 @@ app.GlobalController = Marionette.Controller.extend({
 
     },
     index: function () {
-        this.indexWithoutFetch();
         var that = this;
+        this.application.rootLayout.header.show(new app.HeaderView());
 
-        var username = this.session.get("username");
+        var welcomeScreen = new app.UsageInstructionsView();
+
+        this.listenToOnce(welcomeScreen, "viewProfile", function(username) {
+            that.indexWithUsername(username);
+        });
+
+        this.application.rootLayout.content.show(welcomeScreen);
+
+        return;
+    },
+    executeUserLoad: function() {
         var collection =  this.session.get("repositories");
         var gitHubUser = this.session.get("gitHubUser");
-        var preloaded = this.session.get("preloaded");
+        var username = this.session.get("username");
+        var that = this;
 
-        if (!preloaded) {
-            var userLoadXhr = gitHubUser.fetch({
-                success: function() {
-                    collection.fetchAllPages();
-                },
-                timeout: 10000,
-                error: function(model, response, options) {
+        var userLoadXhr = gitHubUser.fetch({
+            success: function() {
+                collection.fetchAllPages();
+            },
+            timeout: 10000,
+            error: function(model, response, options) {
 
-                    var error = null;
+                var error = null;
 
-                    if (response.statusText == "timeout") {
-                        // The server did not respond...
-                        error = new app.Error({message:"The request to download profile of GitHub user '" + username + "' has timed out."});
+                if (response.statusText == "timeout") {
+                    // The server did not respond...
+                    error = new app.Error({message:"The request to download profile of GitHub user '" + username + "' has timed out."});
 
-                    } else {
-                        if (response.status === 404) {
-                            // The user account does not exist...
+                } else {
+                    if (response.status === 404) {
+                        // The user account does not exist...
 
-                            error = new app.Error({message:"The username '" + username + "' does not exist on GitHub."});
-
-
-                        } else  if (response.status === 403) {
-                            // Rate limit has been hit...
-
-                            error = new app.Error({message:"You have hit the API rate limit set by GitHub. Please try again later."});
+                        error = new app.Error({message:"The username '" + username + "' does not exist on GitHub."});
 
 
-                        } else  if (response.status === 500) {
-                            // API issues
-                            error = new app.Error({message:"The GitHub API returned a server error. They might be down, try again?"});
+                    } else  if (response.status === 403) {
+                        // Rate limit has been hit...
 
-                        }
+                        error = new app.Error({message:"You have hit the API rate limit set by GitHub. Please try again later."});
+
+
+                    } else  if (response.status === 500) {
+                        // API issues
+                        error = new app.Error({message:"The GitHub API returned a server error. They might be down, try again?"});
+
                     }
-
-                    if (!error) {
-                        error = new app.Error({message:"Downloading profile '" + username + "' had an unexpected error."});
-                    }
-                    that.application.rootLayout.content.show(new app.ContentErrorView({model: error}));
                 }
-            });
+
+                if (!error) {
+                    error = new app.Error({message:"Downloading profile '" + username + "' had an unexpected error."});
+                }
+                that.application.rootLayout.header.show(new app.HeaderView());
+                that.application.rootLayout.content.show(new app.ContentErrorView({model: error}));
+            }
+        });
+    },
+    indexWithUsername: function(username) {
+
+        if (this.session === null) {
+            // There should always be a session.
+        } else {
+            var currentUsername = this.session.get("username");
+
+            if (currentUsername == username) {
+                // The session is still for the loaded user.
+                // Use the cached data.
+                this.repoList();
+            } else {
+                // Switch user and update the UI
+                this.session.switchUser(username);
+
+                if (username == "sample") {
+                    app.AttachSampleSession(this.session);
+                } else {
+                    this.executeUserLoad();
+                }
+
+                this.repoList();
+            }
         }
 
     },
     viewRepositoryDetail: function(repository) {
         var that = this;
-        this.application.router.navigate("repository/" + repository.id);
+
+        this.application.router.navigate("user/" + repository.get("owner").login + "/repository/" + repository.id);
 
         var detailsView = new app.RepositoryDetailsLayout({model: repository, session: this.session});
 
@@ -147,12 +183,12 @@ app.GlobalController = Marionette.Controller.extend({
 
         this.application.rootLayout.content.show(detailsView);
     },
-    viewRepositoryDetailById: function(id) {
+    viewRepositoryDetailById: function(username, repositoryId) {
 
-        var repository = this.session.get("repositories").get(id);
+        var repository = this.session.get("repositories").get(repositoryId);
 
         if (!repository) {
-            this.application.router.navigate("repository/" + id);
+            this.application.router.navigate("user/" + username + "/repository/" + repositoryId);
             this.application.rootLayout.content.show(new app.ContentErrorView({model: new app.Error({message:"A repository with id '" + id + "' was not found."})}));
             return;
         }
@@ -161,16 +197,20 @@ app.GlobalController = Marionette.Controller.extend({
 
     },
     defaultAction: function (path) {
-        console.log("UNKNOWN PATH:", path);
-        //window.location = "/" + path;
+       this.fileNotFound();
+    },
+    fileNotFound: function(path) {
+        var error = new app.Error({message:"The file at '" + path + "' was not found."});
+        this.application.rootLayout.content.show(new app.ContentErrorView({model: error}));
     }
 });
 
 app.GlobalRouter = Marionette.AppRouter.extend({
     appRoutes: {
         "": "index",
+        "user/:username": "indexWithUsername",
         "index.html": "index",
-        "repository/:id":"viewRepositoryDetailById",
+        "user/:username/repository/:id":"viewRepositoryDetailById",
         "*path": "defaultAction"
     }
 });
@@ -198,9 +238,16 @@ app.Application = Marionette.Application.extend({
 
         if (this.options.singleInstance) {
             if (app.current && app.current.isStarted) {
-                throw new Error("Another instance has already been started, cannot start another.");
+                throw new Error("This instance cannot be made a single instance as another single instance is already running.");
             }
+
+            // TODO: Check for any non single instance instances that are running.
+
             app.currentSingleInstance = this;
+        } else {
+            if (app.current && app.current.isStarted) {
+                throw new Error("Another instance of this application has already been started, cannot start another.");
+            }
         }
 
         this.router = new app.GlobalRouter({ controller: new app.GlobalController({application: this, session: this.model}) });
@@ -277,5 +324,6 @@ app.StartNewApplication = function(baseContainerSelector, username, sessionToUse
 
 if (!window.isTesting) {
     // window.currentApp = app.StartNewApplication(null, "addyosmani");
+    // window.currentApp = app.StartNewApplication(null, "addyosmani", app.GetSampleSession());
+    window.currentApp = app.StartNewApplication(); // < Will require user to land on a recognised route.
 }
-window.currentApp = app.StartNewApplication(null, "addyosmani", app.GetSampleSession());

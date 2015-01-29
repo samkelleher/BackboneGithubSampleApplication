@@ -4,7 +4,7 @@ var app = window.app || {};
 app.ApplicationSession = Backbone.Model.extend({
     defaults: function() {
         return {
-            username:"samkelleher",
+            username: null,
             repositories: null,
             gitHubUser: null,
             lastRefreshed: null,
@@ -14,7 +14,7 @@ app.ApplicationSession = Backbone.Model.extend({
             preloaded: false
         };
     },
-    validate: function(attributes, options) {
+    validate: function() {
         if (!attributes) {
             return "The session has no properties.";
         }
@@ -28,9 +28,14 @@ app.ApplicationSession = Backbone.Model.extend({
         }
 
     },
-    initialize: function(attributes, options) {
+    createChildren: function() {
+
+        var username = this.get("username");
+
+        if (!username) return;
+
         var that = this;
-        var gitHubUser = new app.GitHubUser({login: this.get("username")});
+        var gitHubUser = new app.GitHubUser({login: username});
         this.set("gitHubUser", gitHubUser);
 
         var repositories = new app.RepositoryCollection([], {gitHubUser: gitHubUser, owner: this});
@@ -43,7 +48,28 @@ app.ApplicationSession = Backbone.Model.extend({
         var rateLimit = this.get("rateLimit");
         rateLimit.observeRateLimitedObject(repositories);
         rateLimit.observeRateLimitedObject(gitHubUser);
+    },
+    switchUser: function(newUsername) {
+        // Ideally we'll replace the session instance with a new one.
+        // But since this is still a single instance style session, we'll just update it.
 
+        this.stopListening();
+        this.set({
+            username: newUsername,
+            preloaded:false,
+            repositories:null,
+            gitHubUser:null,
+            lastRefreshed:null,
+            totalRepositoryCount: null
+        });
+
+        this.createChildren();
+
+        this.trigger("switchedUser");
+
+    },
+    initialize: function() {
+        this.createChildren();
     }
 });
 

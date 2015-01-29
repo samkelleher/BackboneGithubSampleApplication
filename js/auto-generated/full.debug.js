@@ -18863,21 +18863,17 @@ var app = window.app || {};
 app.ApplicationSession = Backbone.Model.extend({
     defaults: function() {
         return {
-            username:"samkelleher",
+            username: null,
             repositories: null,
             gitHubUser: null,
-            totalRepositories: null,
-            requestLimit: null,
-            requestLimitRemaining:null,
-            requestLimitExpires: null, // < Intented to be a DateTime/moment
-            requestLimitReset: null, // < Intented to be the unix EPOCH.
             lastRefreshed: null,
             baseContainer:"#appContainer",
             totalRepositoryCount: null,
-            rateLimit: new app.RateLimit()
+            rateLimit: new app.RateLimit(),
+            preloaded: false
         };
     },
-    validate: function(attributes, options) {
+    validate: function() {
         if (!attributes) {
             return "The session has no properties.";
         }
@@ -18891,17 +18887,48 @@ app.ApplicationSession = Backbone.Model.extend({
         }
 
     },
-    initialize: function(attributes, options) {
-        var gitHubUser = new app.GitHubUser({login: this.get("username")});
+    createChildren: function() {
+
+        var username = this.get("username");
+
+        if (!username) return;
+
+        var that = this;
+        var gitHubUser = new app.GitHubUser({login: username});
         this.set("gitHubUser", gitHubUser);
 
         var repositories = new app.RepositoryCollection([], {gitHubUser: gitHubUser, owner: this});
         this.set("repositories", repositories);
 
+        this.listenTo(repositories, "syncAllPages", function(syncResult) {
+            that.set("totalRepositoryCount", syncResult.totalItemsLoaded)
+        });
+
         var rateLimit = this.get("rateLimit");
         rateLimit.observeRateLimitedObject(repositories);
         rateLimit.observeRateLimitedObject(gitHubUser);
+    },
+    switchUser: function(newUsername) {
+        // Ideally we'll replace the session instance with a new one.
+        // But since this is still a single instance style session, we'll just update it.
 
+        this.stopListening();
+        this.set({
+            username: newUsername,
+            preloaded:false,
+            repositories:null,
+            gitHubUser:null,
+            lastRefreshed:null,
+            totalRepositoryCount: null
+        });
+
+        this.createChildren();
+
+        this.trigger("switchedUser");
+
+    },
+    initialize: function() {
+        this.createChildren();
     }
 });
 
@@ -18972,6 +18999,8 @@ app.RepositoryLanguageDetails = Backbone.Model.extend({
         languageData:null,
         owner: null
     },
+    isFetched: false,
+    isFetching: false,
     parse: function(response) {
         if (!response) return {};
 
@@ -18985,6 +19014,34 @@ app.RepositoryLanguageDetails = Backbone.Model.extend({
         this.url = url;
         delete this.parse;
         return this;
+    },
+    processRateLimits: function(xhr) {
+        if (!xhr) return;
+        this.trigger("rateLimitedXHRComplete", xhr);
+    },
+    fetch: function(options) {
+        if (this.isFetching) return null;
+        this.isFetching = true;
+        options = options ? _.clone(options) : {};
+        var success = options.success;
+        var error = options.error;
+        var model = this;
+
+        options.success = function(model, response, options) {
+            model.isFetched =  true;
+            model.isFetching = false;
+            model.processRateLimits(options.xhr);
+            if (success) success(model, response, options);
+        };
+
+        options.error = function(model, response, options) {
+            model.isFetched =  true;
+            model.isFetching = false;
+            model.processRateLimits(response);
+            if (error) error(model, response, options);
+        };
+
+        return Backbone.Model.prototype.fetch.call(this, options);
     }
 });
 
@@ -19096,6 +19153,35 @@ app.RepositoryCollection = Backbone.Collection.extend({
         var username = this.options.gitHubUser.get("login");
         return "https://api.github.com/users/" + username + "/repos?type=all&per_page=" + this.options.perPage;
     },
+    // Comma separated list of attributes
+    sortColumn: "stargazers_count,watchers_count",
+
+    // Comma separated list corresponding to column list
+    sortDirection: 'desc,desc', // - [ 'asc'|'desc' ]
+    comparator: function( a, b ) {
+
+        if ( !this.sortColumn ) return 0;
+
+        var cols = this.sortColumn.split( ',' ),
+            dirs = this.sortDirection.split( ',' ),
+            cmp;
+
+        // First column that does not have equal values
+        cmp = _.find( cols, function( c ) { return a.attributes[c] != b.attributes[c]; });
+
+        // undefined means they're all equal, so we're done.
+        if ( !cmp ) return 0;
+
+        // Otherwise, use that column to determine the order
+        // match the column sequence to the methods for ascending/descending
+        // default to ascending when not defined.
+        if ( ( dirs[_.indexOf( cols, cmp )] || 'asc' ).toLowerCase() == 'asc' ) {
+            return a.attributes[cmp] > b.attributes[cmp] ? 1 : -1;
+        } else {
+            return a.attributes[cmp] < b.attributes[cmp] ? 1 : -1;
+        }
+
+    },
     initialize: function(models, options) {
 
         if (!options) {
@@ -19193,6 +19279,7 @@ app.RepositoryCollection = Backbone.Collection.extend({
 
         return Backbone.Collection.prototype.fetch.call(this, options);
     },
+    isSynced: false,
     fetchAllPages: function() {
 
         var that = this;
@@ -19202,6 +19289,7 @@ app.RepositoryCollection = Backbone.Collection.extend({
         this.trigger("requestAllPages", this);
 
         var syncAllPages = function() {
+            that.isSynced = true;
             that.trigger("syncAllPages", {
                 pagesFetched: pagesFetched,
                 totalItemsLoaded: totalItemsLoaded
@@ -19273,5 +19361,11 @@ app.RepositoryCollection = Backbone.Collection.extend({
             }});
 
     },
-    model: app.Repository
+    model: app.Repository,
+    keepFirstTwenty: function() {
+        if (this.length > 20) {
+           this.remove(this.tail(20));
+        }
+
+    }
 });

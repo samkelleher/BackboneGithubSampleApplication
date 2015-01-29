@@ -18,10 +18,12 @@ app.HeaderView = Marionette.ItemView.extend({
         "class":"row"
     },
     initialize: function() {
-        this.collection = this.model.get("repositories");
+        if (this.model) {
+            this.collection = this.model.get("repositories");
 
-        if (!this.collection) {
-            throw new Error("The header view requires access to the underlying collection to function.");
+            if (!this.collection) {
+                throw new Error("The header view requires access to the underlying collection to function if there is a model set.");
+            }
         }
 
     },
@@ -71,11 +73,13 @@ app.HeaderView = Marionette.ItemView.extend({
             _name: "Welcome"
         };
 
-        var gitHubUser = this.model.get("gitHubUser");
+        if (this.model) {
+            var gitHubUser = this.model.get("gitHubUser");
 
-        if (gitHubUser) {
-            extras._name = gitHubUser.get("name");
-            extras._avatar_url = gitHubUser.get("avatar_url");
+            if (gitHubUser) {
+                extras._name = gitHubUser.get("name");
+                extras._avatar_url = gitHubUser.get("avatar_url");
+            }
         }
 
         return extras;
@@ -264,5 +268,19 @@ app.RepositoryDetailsLayout =  Marionette.LayoutView.extend({
         }
 
         this.repoDetailsLanguagesContainer.show(new app.RepositoryLanguagesListView({model: languages, repository: this.model, session: this.options.session}));
+    }
+});
+
+app.UsageInstructionsView =  Marionette.ItemView.extend({
+    template:"#template-usageInstructionsView",
+    events: {
+        "click .cmdViewUser":"cmdViewUser"
+    },
+    cmdViewUser: function(e) {
+        e.preventDefault();
+
+        var username = $(e.currentTarget).attr("href").split("/")[1];
+
+        this.trigger("viewProfile", username);
     }
 });
