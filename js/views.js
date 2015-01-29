@@ -274,7 +274,21 @@ app.RepositoryDetailsLayout =  Marionette.LayoutView.extend({
 app.UsageInstructionsView =  Marionette.ItemView.extend({
     template:"#template-usageInstructionsView",
     events: {
-        "click .cmdViewUser":"cmdViewUser"
+        "click .cmdViewUser":"cmdViewUser",
+        "click .cmdSearch":"cmdSearch"
+    },
+    ui: {
+        "txtSearchUsername":".txtSearchUsername"
+    },
+    cmdSearch: function() {
+        var username = this.ui.txtSearchUsername.val();
+
+        if (!username || !username.length) {
+            this.ui.txtSearchUsername.focus();
+            return;
+        }
+
+        this.trigger("viewProfile", username);
     },
     cmdViewUser: function(e) {
         e.preventDefault();
