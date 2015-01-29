@@ -1,6 +1,8 @@
 ## Backbone + Marionette GitHub Profile Sample
 A standalone sample application using [Backbone](http://backbonejs.org/) and [Marionette](http://marionettejs.com/) that connects to the GitHub API to download a list of repositories for a specified user; and displays them in a list.
 
+![Screenshot](/../screenshots/screenshot.png?raw=true "Backbone + Marionette GitHub Profile Sample")
+
 ### Demo
 
 Run the included [index.html](index.html) locally or [run the hosted example](https://samkelleher.github.io/BackboneGithubSampleApplication/index.html).
