@@ -121,7 +121,7 @@
         <% _.each(model.languageData || [], function(element, index, list) { %>
         <div class="repositoryLanguageItem col-xs-<%- model._columnSize %>">
             <span class="languageTitle muted"><%- element.languageName %></span>
-            <span class="languagePercentage muted" title="<%- element.byteLength %> bytes."><%- element.percentage %>%</span>
+            <span class="languagePercentage muted" title="<%- element.byteLength %> bytes."><%- (Math.round(10*element.percentage)/10).toString() %>%</span>
         </div>
         <% }); %>
 
