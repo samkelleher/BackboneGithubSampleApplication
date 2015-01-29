@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Backbone + Marionette GitHub Profile Sample</title>
+
+    <link rel="stylesheet" href="bower_components/octicons/octicons/octicons.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/grid.css" />
+
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+</head>
+<body>
+
+<div id="appContainer"></div>
+
+
+<script type="text/template" id="template-appLayout">
+    <div class="headerContainer"><div class="container"><header class="header"></header></div></div>
+    <div class="container"><section class="content"></section>
+        <section class="footer"></section></div>
+</script>
+
+<script type="text/template" id="template-headerView">
+
+
+    <div class="col-xs-5"><h1><span class="mega-octicon octicon-octoface"></span> Popular Repositories</h1></div>
+    <div class="col-xs-7 text-right">
+
+        <div class="titleContainer">
+            <h2><%- model._name %></h2>
+            <h3><%- model._statusTitle %></h3>
+        </div>
+
+        <div class="avatar">
+
+            <% if(model._avatar_url) { %>
+            <img src="<%- model._avatar_url %>" alt="" title="" style="width:50px; height: 50px;" />
+            <% } %>
+
+
+        </div>
+
+    </div>
+
+
+</script>
+
+<script type="text/template" id="template-repositoryListViewItem">
+
+
+    <div class="col-xs-3 col-sm-9">
+        <h3><%- model.name %></h3>
+
+    </div>
+    <div class="col-xs-3 col-sm-1 muted">
+
+        <span class="octicon octicon-star"></span>&nbsp;<%- model.stargazers_count %>
+
+    </div>
+    <div class="col-xs-3 col-sm-1 muted">
+
+        <span class="octicon octicon-eye"></span>&nbsp;<%- model.watchers_count %>
+
+    </div>
+    <div class="col-xs-3 col-sm-1 muted">
+
+        <span class="octicon octicon-git-branch"></span>&nbsp;<%- model.forks_count %>
+
+    </div>
+
+
+
+</script>
+
+<script type="text/template" id="template-contentErrorView">
+
+    <div class="col-xs-12">
+        <div class="alert alert-danger">
+            <p><%- model.message %></p>
+        </div>
+    </div>
+
+
+</script>
+
+<script type="text/template" id="template-repositoryDetailsLayout">
+
+    <div class="repoDetailsSummaryHeaderContainer"></div>
+    <div class="repoDetailsLanguagesContainer"></div>
+    <div class="row">
+    <div class="col-xs-12"><a class="cmdGoHome" href="index.html">Back to list</a></div>
+</div>
+</script>
+
+<script type="text/template" id="template-repositoryLanguagesListView">
+
+    <% if(model.isFetched) { %>
+
+    <% if(model.languageData && model._numberOfLanguages > 0) { %>
+
+    <div class="row">
+
+        <% _.each(model.languageData || [], function(element, index, list) { %>
+        <div class="repositoryLanguageItem col-xs-<%- model._columnSize %>">
+            <span class="languageTitle muted"><%- element.languageName %></span>
+            <span class="languagePercentage muted" title="<%- element.byteLength %> bytes."><%- element.percentage %>%</span>
+        </div>
+        <% }); %>
+
+        <% if(model._finalFillerColumn) { %>
+        <div class="col-xs-<%- model._finalFillerColumn %>">
+
+        </div>
+        <% } %>
+
+    </div>
+
+    <% } else { %>
+
+    <div class="row">
+        <div class="col-xs-12">GitHib does not have any language information for this repository.</div>
+    </div>
+
+    <% } %>
+
+    <% } else if (model.isFetching) { %>
+
+    <div class="row">
+        <div class="col-xs-12">Loading language data...</div>
+    </div>
+
+    <% } %>
+
+
+
+</script>
+
+
+<script type="text/template" id="template-repositoryDetailsView">
+    <div class="row">
+
+        <div class="col-xs-3 col-sm-9">
+            <h3><%- model.name %> <span class="muted"> &middot;<%- model._lastUpdated %></span></h3>
+
+        </div>
+        <div class="col-xs-3 col-sm-1 muted">
+
+            <span class="octicon octicon-star"></span>&nbsp;<%- model.stargazers_count %>
+
+        </div>
+        <div class="col-xs-3 col-sm-1 muted">
+
+            <span class="octicon octicon-eye"></span>&nbsp;<%- model.watchers_count %>
+
+        </div>
+        <div class="col-xs-3 col-sm-1 muted">
+
+            <span class="octicon octicon-git-branch"></span>&nbsp;<%- model.forks_count %>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-xs-12 muted">
+            <p><%- model.description %></p>
+
+        </div>
+
+    </div>
+
+
+</script>
+
+<script type="text/template" id="template-listFooterView">
+    <% if(model._hasRateLimit) { %>
+    <div class="col-xs-12">
+
+        <div class="alert alert-info">You have <strong><%- model._requestLimitRemaining %></strong> GitHub API calls left from your quota of <strong><%- model._requestLimit %></strong>, this count will be reset at <strong><%- model._resetsAt %></strong>.</div>
+
+    </div>
+
+    <% } else if (model._isPreloaded) { %>
+    <div class="col-xs-12">
+
+        <div class="alert alert-info">This data has been pre-populated without making a call to the GitHub API.</div>
+
+    </div>
+    <% } %>
+</script>
+
+<script src="bower_components/jquery/dist/jquery.js"></script>
+
+<script src="bower_components/underscore/underscore.js"></script>
+
+<script src="bower_components/backbone/backbone.js"></script>
+
+<script src="bower_components/marionette/lib/backbone.marionette.js"></script>
+
+<script src="bower_components/moment/moment.js"></script>
+
+<script src="js/models.js"></script>
+
+<script src="js/views.js"></script>
+
+<script src="js/sampleData.js"></script>
+
+<script src="js/app.js"></script>
+
+
+
+</body>
+</html>

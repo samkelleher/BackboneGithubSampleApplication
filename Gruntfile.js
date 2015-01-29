@@ -63,12 +63,19 @@ module.exports = function (grunt) {
                 }
             }
         },
-        clean: ["js/full.debug.js"]
+        clean: ["js/full.debug.js"],
+        copy: {
+            notfound: {
+                src: 'index.html',
+                dest: '404.html'
+            }
+        }
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     //grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -77,7 +84,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('integration', ['jshint' ,'jasmine:integration']);
 
-    grunt.registerTask('build', ['concat', 'uglify', 'clean', 'jasmine:unit:build', 'jasmine:integration:build']);
+    grunt.registerTask('build', ['concat', 'uglify', 'clean', 'copy', 'jasmine:unit:build', 'jasmine:integration:build']);
 
     grunt.registerTask('default', ['build','test']);
 
