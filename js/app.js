@@ -130,7 +130,7 @@ app.GlobalController = Marionette.Controller.extend({
     },
     viewRepositoryDetail: function(repository) {
         this.application.router.navigate("repository/" + repository.id);
-        this.application.rootLayout.content.show(new app.RepositoryDetailsView({model: repository, session: this.session}));
+        this.application.rootLayout.content.show(new app.RepositoryDetailsLayout({model: repository, session: this.session}));
     },
     viewRepositoryDetailById: function(id) {
 

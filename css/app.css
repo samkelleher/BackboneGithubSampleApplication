@@ -13,6 +13,36 @@ body {
     text-align: right;
 }
 
+.repoDetailsContainer {
+    padding-top: 25px;
+}
+
+.repoDetailsContainer h3 span {
+    font-size: 0.8em;
+}
+
+.repoLanguagesContainer {
+background-color: #f3f3ed;
+    padding: 15px;
+}
+
+.repoLanguagesContainer .languageTitle {
+    font-width: bold;
+    font-size:1.5em;
+}
+
+.repoLanguagesContainer .languagePercentage {
+    font-size:1.8em;
+}
+
+.repositoryLanguageItem {
+    text-align: center;
+}
+
+.repositoryLanguageItem span {
+    display: block;
+}
+
 .avatar {
     width: 50px;
     height: 50px;
@@ -37,6 +67,9 @@ header h3 {
     float: right;
 }
 
+section.footer {
+    margin-top: 15px;
+}
 
 section.content {
     padding-top: 0;
@@ -46,13 +79,25 @@ section.content h3 {
     margin: 0;
 }
 
-section.content .row {
+.muted {
+    color:#9da394;
+}
+
+section.content h3 {
+    color: #87a655;
+}
+
+body {
+    background-color: #f3f3ed;
+}
+
+.repoListCollectionContainer .row {
     padding-top: 8px;
     padding-bottom: 7px;
     border-bottom: solid 1px #f3f3ed;
 }
 
-section.content .row:hover {
+.repoListCollectionContainer .row:hover {
     background-color: #f3f3ed;
     cursor: pointer;
 }

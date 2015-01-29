@@ -122,6 +122,9 @@ app.FooterView = Marionette.ItemView.extend({
             extras._humanizeLeft = timeLeft.humanize(true);
 
             extras._resetsAt = requestLimitExpires.format("h:mma");
+        } else {
+            extras._isPreloaded = this.model.get("preloaded") || false;
+
         }
 
         return extras;
@@ -149,6 +152,9 @@ app.RepositoryListCollectionView = Marionette.CollectionView.extend({
             this.trigger("selectedItem", selectedItem);
         }
     },
+    attributes: {
+        "class":"repoListCollectionContainer"
+    },
     initialize: function() {
 
         if (this.collection.isSynced) {
@@ -165,5 +171,91 @@ app.RepositoryListCollectionView = Marionette.CollectionView.extend({
 });
 
 app.RepositoryDetailsView =  Marionette.ItemView.extend({
-    template:"#template-repositoryDetailsView"
+    template:"#template-repositoryDetailsView",
+        attributes: {
+            "class":"repoDetailsContainer"
+        },
+    templateHelpers: function() {
+
+        var extras = {};
+
+        var updated_at = this.model.get("updated_at");
+
+        if(updated_at) {
+            extras._lastUpdated = "Last updated " + moment.utc(updated_at).fromNow();
+        } else {
+            extras._lastUpdated = "Last update information not available. ";
+        }
+
+
+
+        return extras;
+    }
+});
+
+app.RepositoryLanguagesListView =  Marionette.ItemView.extend({
+    attributes: {
+        "class":"repoLanguagesContainer"
+    },
+    template:"#template-repositoryLanguagesListView",
+    templateHelpers: function() {
+
+        var extras = {
+            isFetched: this.model.isFetched,
+            isFetching: this.model.isFetching
+        };
+
+        var languageData = this.model.get("languageData");
+
+        if (languageData) {
+            extras._numberOfLanguages = languageData.length;
+
+            if (extras._numberOfLanguages > 12) {
+                // Can't display each one in a column.
+            } else {
+                extras._columnSize = Math.floor(12 / extras._numberOfLanguages);
+
+                if ((extras._columnSize * languageData._numberOfLanguages) < 12) {
+                    extras._finalFillerColumn = 12 - (extras._columnSize * extras._numberOfLanguages);
+                } else {
+                    extras._finalFillerColumn = 0;
+                }
+
+            }
+
+        }
+
+        return extras;
+    },
+    modelEvents: {
+        "change":"render",
+        "sync":"render"
+    }
+});
+
+app.RepositoryDetailsLayout =  Marionette.LayoutView.extend({
+    template:"#template-repositoryDetailsLayout",
+    attributes: {
+        "class":"repositoryDetailsLayoutContainer"
+    },
+    regions: {
+        repoDetailsSummaryHeaderContainer: ".repoDetailsSummaryHeaderContainer",
+        repoDetailsLanguagesContainer: ".repoDetailsLanguagesContainer"
+    },
+    onShow: function() {
+        this.repoDetailsSummaryHeaderContainer.show(new app.RepositoryDetailsView({model: this.model, session: this.options.session}));
+
+        var languages = this.model.get("_languages");
+
+        if (!languages) {
+            languages = new app.RepositoryLanguageDetails().withUrl(this.model.get("languages_url"));
+
+            var rateLimit = this.options.session.get("rateLimit");
+            this.model.set("_languages", languages);
+            rateLimit.observeRateLimitedObject(languages);
+            languages.fetch();
+        }
+
+        this.repoDetailsLanguagesContainer.show(new app.RepositoryLanguagesListView({model: languages, repository: this.model, session: this.options.session}));
+    }
 });

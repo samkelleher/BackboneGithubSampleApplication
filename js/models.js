@@ -47,7 +47,6 @@ app.ApplicationSession = Backbone.Model.extend({
     }
 });
 
-
 app.RepositoryLanguageDetails = Backbone.Model.extend({
     url: function() {
 
@@ -115,6 +114,8 @@ app.RepositoryLanguageDetails = Backbone.Model.extend({
         languageData:null,
         owner: null
     },
+    isFetched: false,
+    isFetching: false,
     parse: function(response) {
         if (!response) return {};
 
@@ -128,6 +129,34 @@ app.RepositoryLanguageDetails = Backbone.Model.extend({
         this.url = url;
         delete this.parse;
         return this;
+    },
+    processRateLimits: function(xhr) {
+        if (!xhr) return;
+        this.trigger("rateLimitedXHRComplete", xhr);
+    },
+    fetch: function(options) {
+        if (this.isFetching) return null;
+        this.isFetching = true;
+        options = options ? _.clone(options) : {};
+        var success = options.success;
+        var error = options.error;
+        var model = this;
+
+        options.success = function(model, response, options) {
+            model.isFetched =  true;
+            model.isFetching = false;
+            model.processRateLimits(options.xhr);
+            if (success) success(model, response, options);
+        };
+
+        options.error = function(model, response, options) {
+            model.isFetched =  true;
+            model.isFetching = false;
+            model.processRateLimits(response);
+            if (error) error(model, response, options);
+        };
+
+        return Backbone.Model.prototype.fetch.call(this, options);
     }
 });
 
