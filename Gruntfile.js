@@ -2,10 +2,6 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        //watch: {
-        //    files: ['<%= jshint.files %>'],
-        //    tasks: ['jshint']
-        //},
         jshint: {
             files: ['js/*.js'],
             options: {
@@ -74,6 +70,47 @@ module.exports = function (grunt) {
                     {src: 'index.html', dest: '404.html'}
                 ]
             }
+        },
+        karma: {
+            options: {
+                basePath: process.cwd(),
+                singleRun: true,
+                captureTimeout: 7000,
+                autoWatch: false,
+                logLevel: "ERROR",
+                reporters: ["dots", "coverage"],
+                browsers: ["PhantomJS"],
+                frameworks: ["jasmine"],
+                plugins: ["karma-jasmine", "karma-phantomjs-launcher", "karma-coverage"],
+                preprocessors: {
+                    "js/*.js": "coverage"
+                },
+                coverageReporter: {
+                    type: "lcov",
+                    dir: "tests/coverage"
+                },
+                files: [
+                    'bower_components/jquery/dist/jquery.js',
+                    'bower_components/underscore/underscore.js',
+                    'bower_components/backbone/backbone.js',
+                    'bower_components/marionette/lib/backbone.marionette.js',
+                    'bower_components/moment/moment.js',
+                    "tests/helpers.js",
+                    "js/*.js",
+
+                    "tests/unit-spec.js"
+                ]
+            },
+            run: {
+                options: {
+                    singleRun: true
+                }
+            }
+        },
+        coveralls: {
+            options: {
+                coverageDir: "tests/coverage"
+            }
         }
     });
 
@@ -81,11 +118,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    //grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks("grunt-karma-coveralls");
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-karma');
 
-    grunt.registerTask('test', ['jshint' ,'jasmine:unit']);
+    grunt.registerTask('test', ['jshint', 'karma:run']);
 
     grunt.registerTask('integration', ['jshint' ,'jasmine:integration']);
 

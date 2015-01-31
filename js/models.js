@@ -1,4 +1,3 @@
-"use strict";
 var app = window.app || {};
 
 app.ApplicationSession = Backbone.Model.extend({
@@ -14,7 +13,7 @@ app.ApplicationSession = Backbone.Model.extend({
             preloaded: false
         };
     },
-    validate: function() {
+    validate: function(attributes) {
         if (!attributes) {
             return "The session has no properties.";
         }
@@ -24,7 +23,7 @@ app.ApplicationSession = Backbone.Model.extend({
         }
 
         if (!attributes.baseContainer) {
-            return "The application requires a selector for a DOM element in which it should render."
+            return "The application requires a selector for a DOM element in which it should render.";
         }
 
     },
@@ -42,7 +41,7 @@ app.ApplicationSession = Backbone.Model.extend({
         this.set("repositories", repositories);
 
         this.listenTo(repositories, "syncAllPages", function(syncResult) {
-            that.set("totalRepositoryCount", syncResult.totalItemsLoaded)
+            that.set("totalRepositoryCount", syncResult.totalItemsLoaded);
         });
 
         var rateLimit = this.get("rateLimit");
@@ -356,7 +355,7 @@ app.RepositoryCollection = Backbone.Collection.extend({
         // <https://api.github.com/user/1/repos?type=all&page=1&per_page=100>; rel="prev"
 
 
-        if (!header || header.length == 0) {
+        if (!header || header.length === 0) {
             return {totalPages: currentPage};
         }
 

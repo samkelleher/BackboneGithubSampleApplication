@@ -224,16 +224,16 @@ app.Application = Marionette.Application.extend({
     initialize: function (options) {
 
         if (!this.options) {
-            throw new Error("An application needs a session object to be able to run.");
+            throw new Error("An application needs an options object to be able to run.");
         }
 
         if (!this.options.model) {
 
             throw new Error("An application needs a session object to be able to run.");
+        }
 
-            if (!this.options.model.isValid()) {
-                throw new Error(this.options.model.validationError);
-            }
+        if (!this.options.model.isValid()) {
+            throw new Error(this.options.model.validationError);
         }
 
         if (this.options.singleInstance) {
