@@ -123,7 +123,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-karma');
 
-    grunt.registerTask('test', ['jshint', 'karma:run']);
+    grunt.registerTask('test', ['jshint', 'karma:run', 'coveralls']);
+
+    grunt.registerTask('coverage', ['coveralls']);
 
     grunt.registerTask('integration', ['jshint' ,'jasmine:integration']);
 
