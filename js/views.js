@@ -206,7 +206,8 @@ app.RepositoryLanguagesListView =  Marionette.ItemView.extend({
 
         var extras = {
             isFetched: this.model.isFetched,
-            isFetching: this.model.isFetching
+            isFetching: this.model.isFetching,
+            fetchError: this.model.fetchError
         };
 
         var languageData = this.model.get("languageData");
@@ -233,7 +234,8 @@ app.RepositoryLanguagesListView =  Marionette.ItemView.extend({
     },
     modelEvents: {
         "change":"render",
-        "sync":"render"
+        "sync":"render",
+        "error":"render"
     }
 });
 
@@ -264,7 +266,11 @@ app.RepositoryDetailsLayout =  Marionette.LayoutView.extend({
             var rateLimit = this.options.session.get("rateLimit");
             this.model.set("_languages", languages);
             rateLimit.observeRateLimitedObject(languages);
-            languages.fetch();
+            languages.fetch({
+                error: function() {
+
+                }
+            });
         }
 
         this.repoDetailsLanguagesContainer.show(new app.RepositoryLanguagesListView({model: languages, repository: this.model, session: this.options.session}));
@@ -275,15 +281,31 @@ app.UsageInstructionsView =  Marionette.ItemView.extend({
     template:"#template-usageInstructionsView",
     events: {
         "click .cmdViewUser":"cmdViewUser",
-        "click .cmdSearch":"cmdSearch"
+        "click .cmdSearch":"cmdSearch",
+        "keydown .txtSearchUsername":"cmdSearchOnEnter"
     },
     ui: {
         "txtSearchUsername":".txtSearchUsername"
+    },
+    cmdSearchOnEnter: function(e) {
+        if(e.which == 13) {
+            this.cmdSearch();
+        }
+    },
+    isValidGitHubUsername: function(username) {
+        return /^\w[\w-]+$/.test(username);
     },
     cmdSearch: function() {
         var username = this.ui.txtSearchUsername.val();
 
         if (!username || !username.length) {
+            this.ui.txtSearchUsername.focus();
+            return;
+        }
+
+        username = username.trim();
+
+        if (!this.isValidGitHubUsername(username)) {
             this.ui.txtSearchUsername.focus();
             return;
         }

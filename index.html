@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="bower_components/octicons/octicons/octicons.css" />
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="css/grid.css" />
+    <link rel="icon" type="image/vnd.microsoft.icon" href="css/favicon.ico" />
 
     <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
 </head>
@@ -29,16 +30,15 @@
 
         <div class="titleContainer">
             <h2><%- model._name %></h2>
+            <% if (model._statusTitle && model._statusTitle.length) { %>
             <h3><%- model._statusTitle %></h3>
+            <% } %>
         </div>
 
         <div class="avatar">
-
             <% if(model._avatar_url) { %>
             <img src="<%- model._avatar_url %>" alt="" title="" style="width:50px; height: 50px;" />
             <% } %>
-
-
         </div>
 
     </div>
@@ -75,9 +75,9 @@
 
 <script type="text/template" id="template-contentErrorView">
 
-    <div class="col-xs-12">
+    <div class="col-xs-12" style="padding-top: 15px;">
         <div class="alert alert-danger">
-            <p><%- model.message %></p>
+            <%- model.message %>
         </div>
     </div>
 
@@ -93,7 +93,6 @@
 </div>
 </script>
 
-
 <script type="text/template" id="template-usageInstructionsView">
     <div class="row">
         <div class="col-xs-12">
@@ -104,7 +103,7 @@
                 <li><a class="cmdViewUser" href="user/addyosmani">Addy Osmani</a> (has <i>lots</i> of repositories and demonstrates paging and filtering).</li>
                 <li><a class="cmdViewUser" href="user/sample">Sample Data</a> (which doesn't make any API calls).</li>
                 <li><a class="cmdViewUser" href="user/sdfouheyf092jefdg">Non-Existant User</a> (tests error handling for a user that doesn't exist).</li>
-                <li><input type="text" class="txtSearchUsername" placeholder="Enter github username..." /> <button class="cmdSearch">View</button>.</li>
+                <li><input type="text" class="txtSearchUsername" placeholder="Enter github username..." title="Alphanumeric and hyphen characters only. Username cannot start with a hyphen either. Press [Enter] to search." /> <button class="cmdSearch">View Repositories</button></li>
             </ul>
         </div>
     </div>
@@ -112,9 +111,15 @@
 
 <script type="text/template" id="template-repositoryLanguagesListView">
 
-    <% if(model.isFetched) { %>
+    <% if (model.isFetched) { %>
 
-    <% if(model.languageData && model._numberOfLanguages > 0) { %>
+    <% if (model.fetchError) { %>
+
+    <div class="row">
+        <div class="col-xs-12">There was an error querying the languages this project uses.</div>
+    </div>
+
+    <% } else if (model.languageData && model._numberOfLanguages > 0) { %>
 
     <div class="row">
 
@@ -136,7 +141,7 @@
     <% } else { %>
 
     <div class="row">
-        <div class="col-xs-12">GitHib does not have any language information for this repository.</div>
+        <div class="col-xs-12">GitHub does not have any language information for this repository.</div>
     </div>
 
     <% } %>
@@ -153,12 +158,11 @@
 
 </script>
 
-
 <script type="text/template" id="template-repositoryDetailsView">
     <div class="row">
 
         <div class="col-xs-3 col-sm-9">
-            <h3><%- model.name %> <span class="muted"> &middot;<%- model._lastUpdated %></span></h3>
+            <h3><%- model.name %><span class="muted">&nbsp;&middot;&nbsp;<%- model._lastUpdated %></span></h3>
 
         </div>
         <div class="col-xs-3 col-sm-1 muted">

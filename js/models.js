@@ -18,10 +18,6 @@ app.ApplicationSession = Backbone.Model.extend({
             return "The session has no properties.";
         }
 
-        if (!attributes.username) {
-            return "The application requires a username of a GitHub user to function.";
-        }
-
         if (!attributes.baseContainer) {
             return "The application requires a selector for a DOM element in which it should render.";
         }
@@ -170,6 +166,7 @@ app.RepositoryLanguageDetails = Backbone.Model.extend({
         options.success = function(model, response, options) {
             model.isFetched =  true;
             model.isFetching = false;
+            model.fetchError = false;
             model.processRateLimits(options.xhr);
             if (success) success(model, response, options);
         };
@@ -177,6 +174,7 @@ app.RepositoryLanguageDetails = Backbone.Model.extend({
         options.error = function(model, response, options) {
             model.isFetched =  true;
             model.isFetching = false;
+            model.fetchError = true;
             model.processRateLimits(response);
             if (error) error(model, response, options);
         };
