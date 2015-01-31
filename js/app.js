@@ -55,6 +55,7 @@ app.CreateQueryString = function (obj) {
 
 app.GlobalController = Marionette.Controller.extend({
     initialize: function(options) {
+
         if (!this.options.application) {
             throw new Error("A controller needs a reference to the application that created it.");
         }
@@ -221,11 +222,7 @@ Backbone.Marionette.TemplateCache.prototype.compileTemplate = function (rawTempl
 };
 
 app.Application = Marionette.Application.extend({
-    initialize: function (options) {
-
-        if (!this.options) {
-            throw new Error("An application needs an options object to be able to run.");
-        }
+    initialize: function () {
 
         if (!this.options.model) {
 
@@ -241,9 +238,7 @@ app.Application = Marionette.Application.extend({
                 throw new Error("This instance cannot be made a single instance as another single instance is already running.");
             }
 
-            // TODO: Check for any non single instance instances that are running.
-
-            app.currentSingleInstance = this;
+            app.current = this;
         } else {
             if (app.current && app.current.isStarted) {
                 throw new Error("Another instance of this application has already been started, cannot start another.");

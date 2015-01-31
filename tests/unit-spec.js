@@ -92,40 +92,53 @@ describe("Calculate repository statstics.", function() {
 
 });
 
-describe("Calculate repository statstics.", function() {
+describe("Runs within a defined application.", function() {
 
-    var repositoryLanguageDetails = new app.RepositoryLanguageDetails().setLanguageObject({
-        "C": 3,
-        "Python": 3,
-        "Swift":3
+    it("A global controller that checks it has been initialized properly.", function() {
+
+        expect( function(){
+            var controller = new app.GlobalController({});
+        } ).toThrow(new Error("A controller needs a reference to the application that created it."));
+
+        expect( function(){
+            var controller = new app.GlobalController({application:{}});
+        } ).toThrow(new Error("A controller needs a reference to the session that it is running in."));
+
     });
 
-    var languageArray = repositoryLanguageDetails.get("languageData");
+    it("An application that checks it has been initialized properly.", function() {
 
-    it("Can process preset language data.", function() {
-        expect(languageArray).not.toBe(undefined);
-        expect(languageArray).not.toBe(null);
+        expect( function(){
+            var appTest = new app.Application({});
+        } ).toThrow(new Error("An application needs a session object to be able to run."));
+
+        expect( function(){
+            var appTest = new app.Application({model:{
+                validationError:"Model Invalid Test Error Message",
+                isValid: function() {
+                return false;
+            }}});
+        } ).toThrow(new Error("Model Invalid Test Error Message"));
+
+        app.current = {isStarted: true};
+
+        expect( function(){
+
+            var appTest = new app.Application({
+                singleInstance: true,
+                model:{  isValid: function() {
+                    return true;
+                }}});
+        } ).toThrow(new Error("This instance cannot be made a single instance as another single instance is already running."));
+
+        expect( function(){
+            var appTest = new app.Application({
+                singleInstance: false,
+                model:{  isValid: function() {
+                    return true;
+                }}});
+        } ).toThrow(new Error("Another instance of this application has already been started, cannot start another."));
+
     });
-
-    it("Returns the correct number of languages.", function() {
-        expect(languageArray.length).toBe(3);
-    });
-
-    // None of my hacking could get them to add to 100.
-    /*var totalPercentage = 0;
-
-     var percentageValues = _.pluck(languageArray, "percentage");
-     console.log(languageArray);
-     console.log(percentageValues[0]);
-
-     for (var i = 0; i < percentageValues.length; i++) {
-     totalPercentage += percentageValues[i]
-     }
-
-     console.log(totalPercentage);
-
-     it("An odd number of percentage still adds up to 100.", function() {
-     expect(totalPercentage).toBe(100);
-     });*/
 
 });

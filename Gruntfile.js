@@ -96,7 +96,9 @@ module.exports = function (grunt) {
                     'bower_components/marionette/lib/backbone.marionette.js',
                     'bower_components/moment/moment.js',
                     "tests/helpers.js",
-                    "js/*.js",
+                    "js/models.js",
+                    "js/app.js",
+                    "js/views.js",
 
                     "tests/unit-spec.js"
                 ]
