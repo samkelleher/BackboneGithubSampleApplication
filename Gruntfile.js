@@ -45,11 +45,11 @@ module.exports = function (grunt) {
             },
             libs: {
                 src: ['bower_components/jquery/dist/jquery.js','bower_components/underscore/underscore.js','bower_components/backbone/backbone.js','bower_components/marionette/lib/backbone.marionette.js','bower_components/moment/moment.js' ],
-                dest: 'js/auto-generated/libs.js'
+                dest: 'dist/libs.js'
             },
             full: {
-                src: ['js/auto-generated/libs.js','js/models.js'],
-                dest: 'js/auto-generated/full.debug.js'
+                src: ['dist/libs.js','js/models.js','js/templates.js','js/views.js','js/app.js'],
+                dest: 'dist/full.debug.js'
             }
         },
         uglify: {
@@ -58,11 +58,11 @@ module.exports = function (grunt) {
             },
             my_target: {
                 files: {
-                    'js/auto-generated/full.min.js': ['js/auto-generated/full.debug.js']
+                    'dist/app.min.js': ['js/auto-generated/full.debug.js']
                 }
             }
         },
-        clean: ["js/full.debug.js"],
+        clean: ["dist/libs.js","dist/full.debug.js"],
         copy: {
             main: {
                 files: [
@@ -113,6 +113,26 @@ module.exports = function (grunt) {
             options: {
                 coverageDir: "tests/coverage"
             }
+        },
+        cssmin: {
+            release: {
+                files: {
+                    "dist/css.min.css":["css/grid.css","css/app.css"]
+                }
+            }
+        },
+        jst: {
+            compile: {
+                files: {
+                    "ks/templates.js": ["views/*.html"]
+                },
+                options: {
+                    namespace: "app.templates",
+                    processName: function(filepath) {
+                        return filepath.substring(6);
+                    }
+                }
+            }
         }
     });
 
@@ -120,6 +140,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-jst');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks("grunt-karma-coveralls");
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -131,7 +152,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('integration', ['jshint' ,'jasmine:integration']);
 
-    grunt.registerTask('build', ['concat', 'uglify', 'clean', 'copy', 'jasmine:unit:build', 'jasmine:integration:build']);
+    grunt.registerTask('build', ['concat', 'cssmin:release', 'uglify', 'clean', 'copy', 'jasmine:unit:build', 'jasmine:integration:build']);
 
     grunt.registerTask('default', ['build','test']);
 
