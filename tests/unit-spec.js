@@ -56,6 +56,18 @@ describe("Browse GitHub repos.", function() {
 
 describe("Calculate repository statstics.", function() {
 
+
+    it("Parse language results.", function() {
+        var languageDetails = new app.RepositoryLanguageDetails();
+
+        var result = languageDetails.parseLanguageObject();
+        expect(jQuery.isArray(result)).toBe(true);
+
+        result = languageDetails.parseLanguageObject({});
+        expect(jQuery.isArray(result)).toBe(true);
+
+    });
+
     var repositoryLanguageDetails = new app.RepositoryLanguageDetails().setLanguageObject({
         "C": 3,
         "Python": 3,
@@ -140,5 +152,71 @@ describe("Runs within a defined application.", function() {
         } ).toThrow(new Error("Another instance of this application has already been started, cannot start another."));
 
     });
+
+});
+
+describe("Maintains a local session state.", function() {
+
+    it("Has default session values.", function() {
+        var session = new app.ApplicationSession();
+
+        var baseContainer = session.get("baseContainer");
+        var isValid = session.isValid();
+
+        expect(baseContainer).not.toBe(null);
+        expect(isValid).toBe(true);
+
+    });
+
+    it("To detect user changes.", function() {
+
+        var session = new app.ApplicationSession();
+
+        var spies = {
+            switchedUser: function() {
+
+            }
+        }
+
+        spyOn(spies, "switchedUser");
+
+        session.on("switchedUser", spies.switchedUser);
+
+        session.switchUser("example");
+
+        var username = session.get("username");
+
+        expect(username).toBe("example");
+
+        expect(spies.switchedUser).toHaveBeenCalled();
+
+    });
+
+
+});
+
+
+describe("Know about a repository language usage.", function() {
+
+    it("Generates a API url.", function() {
+        var languageDetails = new app.RepositoryLanguageDetails();
+
+        expect(function(){
+            return languageDetails.url();
+        } ).toThrow();
+
+        languageDetails.id = 1;
+
+        expect(function(){
+            return languageDetails.url();
+        } ).toThrow();
+
+        languageDetails.set("owner", "example");
+
+        var url = languageDetails.url();
+
+        expect(url).toBe("https://api.github.com/repos/example/1/languages");
+    });
+
 
 });

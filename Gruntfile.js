@@ -92,7 +92,7 @@ module.exports = function (grunt) {
                 frameworks: ["jasmine"],
                 plugins: ["karma-jasmine", "karma-phantomjs-launcher", "karma-coverage"],
                 preprocessors: {
-                    "js/*.js": "coverage"
+                    "js/!(templates).js": "coverage"
                 },
                 coverageReporter: {
                     type: "lcov",

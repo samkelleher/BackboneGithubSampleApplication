@@ -97,11 +97,6 @@ app.RepositoryLanguageDetails = Backbone.Model.extend({
             return [];
         }
 
-
-        var strip = function(number) {
-            return (parseFloat(number.toPrecision(12)));
-        };
-
         languageData = _.each(languageData, function(language) {
             language.percentageFloat = (language.byteLength / totalBytes) * 100;
             language.percentage = ((Math.round(10*language.percentageFloat)/10).toFixed(1).toString()) * 1;
