@@ -116,6 +116,10 @@ describe("Runs within a defined application.", function() {
             var controller = new app.GlobalController({application:{}});
         } ).toThrow(new Error("A controller needs a reference to the session that it is running in."));
 
+        var controller = new app.GlobalController({application:{}, session:{}});
+        expect(controller.session).not.toBe(undefined);
+
+
     });
 
     it("An application that checks it has been initialized properly.", function() {
@@ -151,6 +155,8 @@ describe("Runs within a defined application.", function() {
                 }}});
         } ).toThrow(new Error("Another instance of this application has already been started, cannot start another."));
 
+        delete app.current;
+
     });
 
 });
@@ -166,6 +172,12 @@ describe("Maintains a local session state.", function() {
         expect(baseContainer).not.toBe(null);
         expect(isValid).toBe(true);
 
+    });
+
+    it("Checks it has a base container.", function() {
+        var session = new app.ApplicationSession({baseContainer: null});
+        var isValid = session.isValid();
+        expect(isValid).toBe(false);
     });
 
     it("To detect user changes.", function() {
@@ -195,7 +207,6 @@ describe("Maintains a local session state.", function() {
 
 });
 
-
 describe("Know about a repository language usage.", function() {
 
     it("Generates a API url.", function() {
@@ -216,7 +227,72 @@ describe("Know about a repository language usage.", function() {
         var url = languageDetails.url();
 
         expect(url).toBe("https://api.github.com/repos/example/1/languages");
+
+        languageDetails = languageDetails.withUrl("example");
+        url = languageDetails.url();
+
+        expect(url).toBe("example");
     });
 
+
+});
+
+describe("Use query strings.", function() {
+
+    it("Parse Query Strings.", function() {
+        var qs = app.ParseQueryString();
+        expect(qs).toEqual({});
+
+        qs = app.ParseQueryString("   ");
+        expect(qs).toEqual({});
+
+        qs = app.ParseQueryString("test=true");
+        expect(qs).toEqual({"test":"true"});
+
+    });
+
+    it("Create Query Strings.", function() {
+        var qs = app.CreateQueryString();
+        expect(qs).toEqual("");
+
+        qs = app.CreateQueryString({"test":"true"});
+        expect(qs).toEqual("test=true");
+
+    });
+
+});
+
+describe("Run an application lifecycle.", function() {
+
+    beforeEach(function() {
+        $("body").append($("<div id=\"appContainer\" style=\"display: none;\"></div>"));
+    });
+
+    afterEach(function() {
+       $("#appContainer").remove();
+    });
+
+    var testApplication = null;
+
+    it("Startup.", function() {
+
+        testApplication = app.StartNewApplication();
+
+        expect(testApplication).not.toBe(null);
+        expect(testApplication.isStarted).toBe(true);
+
+    });
+
+    it("Stop.", function() {
+
+        if (!testApplication) return;
+
+        testApplication.stop();
+
+        expect(testApplication.isStarted).toBe(false);
+
+        expect($('#appContainer').is(':empty')).toBe(true);
+
+    });
 
 });

@@ -217,11 +217,6 @@ app.GlobalRouter = Marionette.AppRouter.extend({
     }
 });
 
-Backbone.Marionette.TemplateCache.prototype.compileTemplate = function (rawTemplate) {
-    // Add a model attribute for performance.
-    return _.template(rawTemplate, { variable: "model" });
-};
-
 app.Application = Marionette.Application.extend({
     initialize: function () {
 

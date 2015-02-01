@@ -14,14 +14,9 @@ app.ApplicationSession = Backbone.Model.extend({
         };
     },
     validate: function(attributes) {
-        if (!attributes) {
-            return "The session has no properties.";
-        }
-
         if (!attributes.baseContainer) {
             return "The application requires a selector for a DOM element in which it should render.";
         }
-
     },
     createChildren: function() {
 
@@ -85,8 +80,6 @@ app.RepositoryLanguageDetails = Backbone.Model.extend({
     },
     parseLanguageObject: function(response) {
 
-        if (!response) return [];
-
         var totalBytes = 0;
         var languageData = _.map(response, function(byteLength, languageName) {
             totalBytes += byteLength;
@@ -133,7 +126,6 @@ app.RepositoryLanguageDetails = Backbone.Model.extend({
     isFetched: false,
     isFetching: false,
     parse: function(response) {
-        if (!response) return {};
 
         response.languageData = this.parseLanguageObject(response);
         response.id = this.id;
@@ -142,7 +134,9 @@ app.RepositoryLanguageDetails = Backbone.Model.extend({
         return response;
     },
     withUrl: function(url) {
-        this.url = url;
+        this.url = function() {
+           return url;
+        };
         delete this.parse;
         return this;
     },
