@@ -8,7 +8,7 @@
 
 ### Demo
 
-Run the included [index.html](index.html) locally or [run the hosted example](https://samkelleher.github.io/BackboneGithubSampleApplication/index.html).
+Run the included [index.html](index.html) locally or [run the hosted distributable example](https://samkelleher.github.io/BackboneGithubSampleApplication/dist/index.html).
 
 ### Setup Locally
 
@@ -30,9 +30,9 @@ Both Grunt and Bower can installed automatically by running the `npm install` co
 
 ### Building
 
-You can run the full unminified version by just opening the root [index.html](index.html). There is also a [/dist/](dist) directory that contains the full compiled version (minified css/js etc), this directory contains all the files needed to run the application.
+You can run the full unminified version by just opening the root [index.html](index.html). There is also a [/dist/](dist) directory that contains the [full compiled version](dist/index.html) (minified css/js etc), this directory contains all the files needed to run the application.
 
-To regenrate this directory run `grunt build`.
+To regenerate this directory run `grunt build`.
 
 The debug template also always uses pre-compiled view templates from the auto-generated [js/templates.js](js/templates.js). The content of this file consists of all the un-compiled html views that are found in the [/views/](views) folder.
 
