@@ -49,7 +49,7 @@ module.exports = function (grunt) {
             },
             full: {
                 src: ['dist/libs.js','js/models.js','js/templates.js','js/views.js','js/app.js'],
-                dest: 'dist/full.debug.js'
+                dest: 'dist/app.debug.js'
             }
         },
         uglify: {
@@ -58,16 +58,25 @@ module.exports = function (grunt) {
             },
             my_target: {
                 files: {
-                    'dist/app.min.js': ['js/auto-generated/full.debug.js']
+                    'dist/app.min.js': ['dist/app.debug.js']
                 }
             }
         },
-        clean: ["dist/libs.js","dist/full.debug.js"],
+        clean: {
+            dist: ["dist/*.*"],
+            build: ["dist/libs.js","dist/app.debug.js"]
+        },
         copy: {
             main: {
                 files: [
                     {src: ['.grunt/grunt-contrib-jasmine/*'], dest: 'tests/jasmine/', flatten: true, filter: 'isFile', expand: true },
-                    {src: 'index.html', dest: '404.html'}
+                    {src: 'css/favicon.ico', dest: 'dist/favicon.ico'},
+                    {src: [
+                        'bower_components/octicons/octicons/octicons.eot',
+                        'bower_components/octicons/octicons/octicons.woff',
+                        'bower_components/octicons/octicons/octicons.ttf',
+                        'bower_components/octicons/octicons/octicons.svg'
+                    ], dest: 'dist', filter: 'isFile', flatten: true, expand: true },
                 ]
             }
         },
@@ -115,9 +124,9 @@ module.exports = function (grunt) {
             }
         },
         cssmin: {
-            release: {
+            target: {
                 files: {
-                    "dist/css.min.css":["css/grid.css","css/app.css"]
+                    "dist/app.min.css":["bower_components/octicons/octicons/octicons.css", "css/grid.css","css/app.css"]
                 }
             }
         },
@@ -145,6 +154,16 @@ module.exports = function (grunt) {
                     interrupt: true
                 }
             }
+        },
+        processhtml: {
+            options: {
+                strip: true
+            },
+            dist: {
+                files: {
+                    'dist/index.html': ['index.html']
+                }
+            }
         }
     });
 
@@ -152,12 +171,14 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-jst');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks("grunt-karma-coveralls");
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-processhtml');
 
     grunt.registerTask('test', ['jshint', 'karma:run', 'coveralls']);
 
@@ -165,7 +186,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('integration', ['jshint' ,'jasmine:integration']);
 
-    grunt.registerTask('build', ['concat', 'cssmin:release', 'uglify', 'clean', 'copy', 'jasmine:unit:build', 'jasmine:integration:build']);
+    grunt.registerTask('build', ['concat', 'cssmin', 'uglify', 'clean:build', 'copy', 'processhtml:dist']);
 
     grunt.registerTask('default', ['build','test']);
 

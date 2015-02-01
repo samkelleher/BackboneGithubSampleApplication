@@ -198,10 +198,11 @@ app.GlobalController = Marionette.Controller.extend({
 
     },
     defaultAction: function (path) {
-       this.fileNotFound();
+        this.fileNotFound(path);
     },
     fileNotFound: function(path) {
         var error = new app.Error({message:"The file at '" + path + "' was not found."});
+        this.application.rootLayout.header.show(new app.HeaderView());
         this.application.rootLayout.content.show(new app.ContentErrorView({model: error}));
     }
 });
@@ -279,7 +280,22 @@ app.Application = Marionette.Application.extend({
     },
     historyStarted: false,
     setupPushState: function() {
-        this.historyStarted = Backbone.history.start({ pushState: this.model.get("singleInstance"), root: "BackboneGithubSampleApplication/" });
+
+        var root = window.location.pathname;
+        var defaultFileName = "index.html";
+        if (!root) {
+            root = "/";
+        } else {
+
+            var indexOfdefaultFileName = root.indexOf(defaultFileName, root.length - defaultFileName.length);
+
+            if (indexOfdefaultFileName !== -1) {
+                root =  root.substring(0, indexOfdefaultFileName)
+            }
+
+        }
+
+        this.historyStarted = Backbone.history.start({ pushState: this.model.get("singleInstance"), root: root });
     },
     stopPushState: function() {
         this.historyStarted = false;
