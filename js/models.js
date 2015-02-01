@@ -32,6 +32,7 @@ app.ApplicationSession = Backbone.Model.extend({
         this.set("repositories", repositories);
 
         this.listenTo(repositories, "syncAllPages", function(syncResult) {
+            /* istanbul ignore next */
             that.set("totalRepositoryCount", syncResult.totalItemsLoaded);
         });
 
@@ -141,8 +142,8 @@ app.RepositoryLanguageDetails = Backbone.Model.extend({
         return this;
     },
     processRateLimits: function(xhr) {
-        if (!xhr) return;
-        this.trigger("rateLimitedXHRComplete", xhr);
+        /* istanbul ignore next */
+        if (xhr) { this.trigger("rateLimitedXHRComplete", xhr); };
     },
     fetch: function(options) {
         if (this.isFetching) return null;
@@ -251,8 +252,7 @@ app.GitHubUser = Backbone.Model.extend({
         return "https://api.github.com/users/" + login;
     },
     processRateLimits: function(xhr) {
-        if (!xhr) return;
-        this.trigger("rateLimitedXHRComplete", xhr);
+        if (xhr) { this.trigger("rateLimitedXHRComplete", xhr); }
     },
     fetch: function(options) {
         options = options ? _.clone(options) : {};
@@ -330,8 +330,8 @@ app.RepositoryCollection = Backbone.Collection.extend({
     },
     currentXhr: null,
     processRateLimits: function(xhr) {
-        if (!xhr) return;
-        this.trigger("rateLimitedXHRComplete", xhr);
+        /* istanbul ignore next */
+        if (xhr) { this.trigger("rateLimitedXHRComplete", xhr); }
     },
     parseLinkHeader: function(header, currentPage) {
 

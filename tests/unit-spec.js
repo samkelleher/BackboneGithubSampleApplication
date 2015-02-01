@@ -12,6 +12,40 @@ describe("Know about GitHub users.", function() {
         expect(repos.url()).toBe("https://api.github.com/users/username");
     });
 
+    it("Understands rate limits.", function() {
+        var testUser = new app.GitHubUser({login: "sample"});
+
+        var spied = {
+            fakefetch: function(options) {
+
+                if (options.complete) {
+                    options.complete({});
+                }
+
+                if (options.error) {
+                    options.error(testUser, {});
+                }
+
+        }};
+
+        spyOn(spied, "fakefetch").and.callThrough();
+        spyOn(Backbone.Model.prototype, "fetch").and.callFake(spied.fakefetch);
+
+        testUser.fetch({
+            success:function() {
+
+            },
+            error:function() {
+
+            },
+            complete:function() {
+
+            }
+        });
+
+        expect(spied.fakefetch).toHaveBeenCalled();
+    });
+
 });
 
 describe("Browse GitHub repos.", function() {
@@ -52,7 +86,10 @@ describe("Browse GitHub repos.", function() {
         var repos = new app.RepositoryCollection([], { gitHubUser: {} });
         var paginationDetails = repos.parseLinkHeader(null, 1);
         expect(paginationDetails.totalPages).toBe(1);
-    });});
+    });
+
+
+});
 
 describe("Calculate repository statstics.", function() {
 
@@ -101,6 +138,45 @@ describe("Calculate repository statstics.", function() {
      it("An odd number of percentage still adds up to 100.", function() {
      expect(totalPercentage).toBe(100);
      });*/
+
+    it("Understands rate limits.", function() {
+        var testRepoLang = new app.RepositoryLanguageDetails({owner: "sample", id: 1});
+
+        var spied = {
+            fakefetch: function(options) {
+
+                if (options.complete) {
+                    options.complete({});
+                }
+
+                if (options.success) {
+                    options.success(testRepoLang, {}, {xhr: {}});
+                }
+
+                if (options.error) {
+                    options.error(testRepoLang, {});
+                }
+
+            }};
+
+        spyOn(spied, "fakefetch").and.callThrough();
+        spyOn(Backbone.Model.prototype, "fetch").and.callFake(spied.fakefetch);
+
+        testRepoLang.fetch({
+            success:function() {
+
+            },
+            error:function() {
+
+            },
+            complete:function() {
+
+            }
+        });
+
+        expect(spied.fakefetch).toHaveBeenCalled();
+    });
+
 
 });
 

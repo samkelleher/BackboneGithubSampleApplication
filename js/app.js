@@ -27,6 +27,7 @@ app.ParseQueryString = function (str) {
             }
         }
 
+        /* istanbul ignore next */
         if (!ret.hasOwnProperty(key)) {
             ret[key] = val;
         } else if (Array.isArray(ret[key])) {
@@ -44,6 +45,7 @@ app.CreateQueryString = function (obj) {
         var val = obj[key];
 
         if (Array.isArray(val)) {
+            /* istanbul ignore next */
             return val.map(function (val2) {
                 return encodeURIComponent(key) + '=' + encodeURIComponent(val2);
             }).join('&');
