@@ -298,10 +298,24 @@ describe("Run an application lifecycle.", function() {
         e.which = 13; // # Enter key
 
         expect( function(){
+            testApplication.rootRegion.currentView.$el.find("input").val("").trigger(e);
+            testApplication.rootRegion.currentView.$el.find("input").val("with a space").trigger(e);
             testApplication.rootRegion.currentView.$el.find("input").val("sample").trigger(e);
         }).not.toThrow();
 
     });
+
+    it("Render a welcome screen and click a prepared profile.", function() {
+        expect( function(){
+            testApplication.router.options.controller.index();
+        }).not.toThrow();
+
+        expect( function(){
+            testApplication.rootRegion.currentView.$el.find("#cmdViewSampleUser").click();
+        }).not.toThrow();
+
+    });
+
 
     it("Render a list of repositories.", function() {
         expect( function(){
@@ -322,6 +336,8 @@ describe("Run an application lifecycle.", function() {
         expect( function(){
             testApplication.router.options.controller.viewRepositoryDetailById("sample", testRepoId);
         }).not.toThrow();
+
+        testApplication.rootRegion.currentView.$el.find(".cmdGoHome").first().click();
 
     });
 

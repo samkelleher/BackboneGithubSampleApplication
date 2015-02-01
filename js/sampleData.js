@@ -1,13 +1,9 @@
 var app = window.app || {};
 
-app.GetSampleSession = function() {
-    var session = new app.ApplicationSession({singleInstance: true});
-
-    return app.AttachSampleSession(session);
-};
-
 app.AttachSampleSession = function(session) {
     session.set({username: "sample", preloaded: true});
+
+    session.get("rateLimit").triggerRateLimitUpdate(1000,999,moment.utc().add(1, "hours").seconds());
 
     session.get("gitHubUser").set({
         "login": "sample",

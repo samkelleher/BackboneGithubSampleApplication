@@ -93,7 +93,10 @@ module.exports = function (grunt) {
                 frameworks: ["jasmine"],
                 plugins: ["karma-jasmine", "karma-phantomjs-launcher", "karma-coverage"],
                 preprocessors: {
-                    "js/!(templates).js": "coverage"
+                    // Glob pattens don't work here because of structure
+                    "js/app.js": "coverage",
+                    "js/models.js": "coverage",
+                    "js/views.js": "coverage"
                 },
                 coverageReporter: {
                     type: "lcov",
