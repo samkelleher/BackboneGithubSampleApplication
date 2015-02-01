@@ -88,6 +88,100 @@ describe("Browse GitHub repos.", function() {
         expect(paginationDetails.totalPages).toBe(1);
     });
 
+    it("Understands rate limits.", function() {
+        var testRepoLang = new app.RepositoryCollection([], { gitHubUser: {get: function() {return "example";}} });
+
+        var spied = {
+            fakefetch: function(options) {
+
+                if (options.complete) {
+                    options.complete({}, "");
+                }
+
+                if (options.success) {
+                    options.success(testRepoLang, {}, {xhr: {}});
+                }
+
+                if (options.error) {
+                    options.error(testRepoLang, {}, {});
+                }
+
+                if (options.beforeSend) {
+                    options.beforeSend({
+                        setRequestHeader: function() { }
+                        }
+                    );
+                }
+
+            }};
+
+        spyOn(spied, "fakefetch").and.callThrough();
+        spyOn(Backbone.Collection.prototype, "fetch").and.callFake(spied.fakefetch);
+
+        testRepoLang.fetch({
+            success:function() {
+
+            },
+            error:function() {
+
+            },
+            complete:function() {
+
+            }
+        });
+
+        expect(spied.fakefetch).toHaveBeenCalled();
+    });
+
+    it("Understands pagination.", function() {
+        var testRepoLang = new app.RepositoryCollection([], { gitHubUser: {get: function() {return "example";}} });
+
+        var spied = {
+            fakefetch: function(options) {
+
+                if (options.complete) {
+                    options.complete({}, "");
+                }
+
+                if (options.success) {
+                    options.success(testRepoLang, {}, {xhr: {
+                        getResponseHeader: function() {
+                            return "<https://api.github.com/user/1/repos?type=all&page=2&per_page=100>; rel=\"next\", <https://api.github.com/user/1/repos?type=all&page=2&per_page=100>; rel=\"last\"";
+                        }
+                    }});
+                }
+
+                if (options.error) {
+                    options.error(testRepoLang, {}, {});
+                }
+
+                if (options.beforeSend) {
+                    options.beforeSend({
+                            setRequestHeader: function() { }
+                        }
+                    );
+                }
+
+            }};
+
+        spyOn(spied, "fakefetch").and.callThrough();
+        spyOn(Backbone.Collection.prototype, "fetch").and.callFake(spied.fakefetch);
+
+        testRepoLang.fetchAllPages({
+            success:function() {
+
+            },
+            error:function() {
+
+            },
+            complete:function() {
+
+            }
+        });
+
+        expect(spied.fakefetch).toHaveBeenCalled();
+    });
+
 
 });
 
@@ -163,8 +257,8 @@ describe("Calculate repository statstics.", function() {
         spyOn(Backbone.Model.prototype, "fetch").and.callFake(spied.fakefetch);
 
         testRepoLang.fetch({
-            success:function() {
-
+            success:function(model, response) {
+                model.parse(response);
             },
             error:function() {
 
@@ -395,7 +489,14 @@ describe("Run an application lifecycle.", function() {
 
     it("Render a list of repositories.", function() {
         expect( function(){
+            var repos = testSession.get("repositories");
             testApplication.router.options.controller.repoList();
+            repos.trigger("requestAllPages");
+            repos.trigger("requestAllPagesProgress", {totalRepositoryCount:1});
+            repos.trigger("syncAllPages", {
+                pagesFetched: 1,
+                totalItemsLoaded: 100
+            });
         }).not.toThrow();
 
     });
@@ -495,12 +596,34 @@ describe("Run an application lifecycle.", function() {
         expect(testGitHubUser.fetch).toHaveBeenCalled();
 
     });
+
     it("Load data when necessary, handle a 403.", function() {
 
         var testGitHubUser = {
             fetch: function(options) {
 
                 options.error({ }, { status: 403 }, { });
+
+                return null;
+            }
+        };
+
+        spyOn(testGitHubUser, "fetch").and.callThrough();
+
+        testSession.set("gitHubUser", testGitHubUser);
+
+        testApplication.router.options.controller.executeUserLoad();
+
+        expect(testGitHubUser.fetch).toHaveBeenCalled();
+
+    });
+
+    it("Load data when necessary, handle an unknown error.", function() {
+
+        var testGitHubUser = {
+            fetch: function(options) {
+
+                options.error({ }, {  }, { });
 
                 return null;
             }

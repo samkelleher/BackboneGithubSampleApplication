@@ -373,7 +373,7 @@ app.RepositoryCollection = Backbone.Collection.extend({
 
     },
     processLinkResponse: function(xhr, currentPage) {
-        if (!xhr) return;
+        if (!xhr) return {totalPages: currentPage};
 
         var requestLink = xhr.getResponseHeader('Link');
 
@@ -394,7 +394,6 @@ app.RepositoryCollection = Backbone.Collection.extend({
         };
 
         options.error = function(model, response, options) {
-            console.log("onError", arguments);
             collection.processRateLimits(response);
             if (error) error(model, response, options);
         };
