@@ -1,0 +1,42 @@
+<% if (model.isFetched) { %>
+
+<% if (model.fetchError) { %>
+
+<div class="row">
+    <div class="col-xs-12">There was an error querying the languages this project uses.</div>
+</div>
+
+<% } else if (model.languageData && model._numberOfLanguages > 0) { %>
+
+<div class="row">
+
+    <% _.each(model.languageData || [], function(element, index, list) { %>
+    <div class="repositoryLanguageItem col-xs-<%- model._columnSize %>">
+        <span class="languageTitle muted"><%- element.languageName %></span>
+        <span class="languagePercentage muted" title="<%- element.byteLength %> bytes."><%- (Math.round(10*element.percentage)/10).toString() %>%</span>
+    </div>
+    <% }); %>
+
+    <% if(model._finalFillerColumn) { %>
+    <div class="col-xs-<%- model._finalFillerColumn %>">
+
+    </div>
+    <% } %>
+
+</div>
+
+<% } else { %>
+
+<div class="row">
+    <div class="col-xs-12">GitHub does not have any language information for this repository.</div>
+</div>
+
+<% } %>
+
+<% } else if (model.isFetching) { %>
+
+<div class="row">
+    <div class="col-xs-12">Loading language data...</div>
+</div>
+
+<% } %>

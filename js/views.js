@@ -6,14 +6,14 @@ app.ApplicationLayout = Marionette.LayoutView.extend({
         header: "header.header",
         footer: "section.footer"
     },
-    template:"#template-appLayout",
+    template: app.templates.AppLayout,
     attributes: {
         "class":"profileAppWrapper"
     }
 });
 
 app.HeaderView = Marionette.ItemView.extend({
-    template:"#template-headerView",
+    template: app.templates.HeaderView,
     attributes: {
         "class":"row"
     },
@@ -87,7 +87,7 @@ app.HeaderView = Marionette.ItemView.extend({
 });
 
 app.RepositoryListViewItem = Marionette.ItemView.extend({
-    template:"#template-repositoryListViewItem",
+    template: app.templates.RepositoryListViewItem,
     attributes: {
         "class":"row"
     },
@@ -101,7 +101,7 @@ app.RepositoryListViewItem = Marionette.ItemView.extend({
 });
 
 app.FooterView = Marionette.ItemView.extend({
-    template:"#template-listFooterView",
+    template: app.templates.ListFooterView,
     attributes: {
         "class":"row"
     },
@@ -143,7 +143,7 @@ app.FooterView = Marionette.ItemView.extend({
 });
 
 app.ContentErrorView = Marionette.ItemView.extend({
-    template:"#template-contentErrorView",
+    template: app.templates.ContentErrorView,
     attributes: {
         "class":"row"
     }
@@ -175,7 +175,7 @@ app.RepositoryListCollectionView = Marionette.CollectionView.extend({
 });
 
 app.RepositoryDetailsView =  Marionette.ItemView.extend({
-    template:"#template-repositoryDetailsView",
+    template: app.templates.RepositoryDetailsView,
         attributes: {
             "class":"repoDetailsContainer"
         },
@@ -201,7 +201,7 @@ app.RepositoryLanguagesListView =  Marionette.ItemView.extend({
     attributes: {
         "class":"repoLanguagesContainer"
     },
-    template:"#template-repositoryLanguagesListView",
+    template: app.templates.RepositoryLanguagesListView,
     templateHelpers: function() {
 
         var extras = {
@@ -240,7 +240,7 @@ app.RepositoryLanguagesListView =  Marionette.ItemView.extend({
 });
 
 app.RepositoryDetailsLayout =  Marionette.LayoutView.extend({
-    template:"#template-repositoryDetailsLayout",
+    template: app.templates.RepositoryDetailsLayout,
     attributes: {
         "class":"repositoryDetailsLayoutContainer"
     },
@@ -278,7 +278,7 @@ app.RepositoryDetailsLayout =  Marionette.LayoutView.extend({
 });
 
 app.UsageInstructionsView =  Marionette.ItemView.extend({
-    template:"#template-usageInstructionsView",
+    template: app.templates.UsageInstructionsView,
     events: {
         "click .cmdViewUser":"cmdViewUser",
         "click .cmdSearch":"cmdSearch",

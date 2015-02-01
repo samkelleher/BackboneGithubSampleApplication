@@ -124,13 +124,25 @@ module.exports = function (grunt) {
         jst: {
             compile: {
                 files: {
-                    "ks/templates.js": ["views/*.html"]
+                    "js/templates.js": ["views/*.html"]
                 },
                 options: {
                     namespace: "app.templates",
                     processName: function(filepath) {
-                        return filepath.substring(6);
+                        return filepath.substring(6, filepath.length - 5);
+                    },
+                    templateSettings: {
+                     variable: "model"
                     }
+                }
+            }
+        },
+        watch: {
+            templates: {
+                files: ['views/*.html'],
+                tasks: ['jst'],
+                options: {
+                    interrupt: true
                 }
             }
         }
@@ -141,6 +153,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jst');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks("grunt-karma-coveralls");
     grunt.loadNpmTasks('grunt-contrib-uglify');

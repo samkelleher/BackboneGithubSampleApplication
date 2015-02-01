@@ -1,0 +1,14 @@
+<% if(model._hasRateLimit) { %>
+<div class="col-xs-12">
+
+    <div class="alert alert-info">You have <strong><%- model._requestLimitRemaining %></strong> GitHub API calls left from your quota of <strong><%- model._requestLimit %></strong>, this count will be reset at <strong><%- model._resetsAt %></strong>.</div>
+
+</div>
+
+<% } else if (model._isPreloaded) { %>
+<div class="col-xs-12">
+
+    <div class="alert alert-info">This data has been pre-populated without making a call to the GitHub API.</div>
+
+</div>
+<% } %>
