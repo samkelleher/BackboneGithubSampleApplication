@@ -143,7 +143,7 @@ app.RepositoryLanguageDetails = Backbone.Model.extend({
     },
     processRateLimits: function(xhr) {
         /* istanbul ignore next */
-        if (xhr) { this.trigger("rateLimitedXHRComplete", xhr); };
+        if (xhr) { this.trigger("rateLimitedXHRComplete", xhr); }
     },
     fetch: function(options) {
         if (this.isFetching) return null;
