@@ -217,6 +217,8 @@ app.GlobalRouter = Marionette.AppRouter.extend({
     }
 });
 
+app.current = null;
+
 app.Application = Marionette.Application.extend({
     initialize: function () {
 
@@ -248,6 +250,11 @@ app.Application = Marionette.Application.extend({
         this.triggerMethod('before:stop');
         this.removeApplicationLayout();
         this.stopPushState();
+
+        if (this.options.singleInstance) {
+            app.current = null;
+        }
+
         this.triggerMethod('stop');
     },
     removeApplicationLayout: function() {
@@ -276,25 +283,26 @@ app.Application = Marionette.Application.extend({
     historyStarted: false,
     setupPushState: function() {
 
-        var root = window.location.pathname;
-        var defaultFileName = "index.html";
-        if (!root) {
-            root = "/";
-        } else {
-
-            var indexOfdefaultFileName = root.indexOf(defaultFileName, root.length - defaultFileName.length);
-
-            if (indexOfdefaultFileName !== -1) {
-                root =  root.substring(0, indexOfdefaultFileName);
-            }
-
+        if (!this.model.get("singleInstance")) {
+            // When running more than one instance, we don't want to alter the URL as it would cause conflicts.
+            return;
         }
 
-        this.historyStarted = Backbone.history.start({ pushState: this.model.get("singleInstance"), root: root });
+        var root = window.location.pathname || "/";
+        var defaultFileName = "index.html";
+        var indexOfdefaultFileName = root.indexOf(defaultFileName, root.length - defaultFileName.length);
+
+        if (indexOfdefaultFileName !== -1) {
+            root =  root.substring(0, indexOfdefaultFileName);
+        }
+
+        this.historyStarted = Backbone.history.start({ pushState: true, root: root });
     },
     stopPushState: function() {
-        this.historyStarted = false;
-        Backbone.history.stop();
+        if (this.historyStarted) {
+            this.historyStarted = false;
+            Backbone.history.stop();
+        }
     },
     onStart: function() {
         this.setupApplicationLayout();

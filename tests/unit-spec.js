@@ -264,22 +264,47 @@ describe("Use query strings.", function() {
 
 describe("Run an application lifecycle.", function() {
 
-    beforeEach(function() {
-        $("body").append($("<div id=\"appContainer\" style=\"display: none;\"></div>"));
-    });
-
-    afterEach(function() {
-       $("#appContainer").remove();
-    });
-
     var testApplication = null;
+
+    $("body").append($("<div id=\"appContainer\" style=\"display: none;\"></div>"));
 
     it("Startup.", function() {
 
-        testApplication = app.StartNewApplication();
+        testApplication = app.StartNewApplication("#appContainer", "sample", new app.ApplicationSession({singleInstance: false, username:"sample", baseContainer:"#appContainer"}));
 
         expect(testApplication).not.toBe(null);
+        expect(app.current).toBe(undefined);
         expect(testApplication.isStarted).toBe(true);
+
+    });
+
+    it("Render a list of repositories.", function() {
+        expect( function(){
+            testApplication.router.options.controller.repoList();
+        }).not.toThrow();
+
+    });
+
+    it("Render a index by username.", function() {
+        expect( function(){
+            testApplication.router.options.controller.indexWithUsername("sample");
+        }).not.toThrow();
+
+    });
+
+    it("Display a 404 page.", function() {
+
+        expect( function(){
+            testApplication.router.options.controller.fileNotFound("example");
+        }).not.toThrow();
+
+    });
+
+    it("Handle an unknown path.", function() {
+
+        expect( function(){
+            testApplication.router.options.controller.defaultAction("example");
+        }).not.toThrow();
 
     });
 
@@ -292,7 +317,9 @@ describe("Run an application lifecycle.", function() {
         expect(testApplication.isStarted).toBe(false);
 
         expect($('#appContainer').is(':empty')).toBe(true);
+        $("#appContainer").remove();
 
     });
+
 
 });
