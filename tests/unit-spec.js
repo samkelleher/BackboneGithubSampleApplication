@@ -88,19 +88,19 @@ describe("Calculate repository statstics.", function() {
     // None of my hacking could get them to add to 100.
     /*var totalPercentage = 0;
 
-    var percentageValues = _.pluck(languageArray, "percentage");
-    console.log(languageArray);
-    console.log(percentageValues[0]);
+     var percentageValues = _.pluck(languageArray, "percentage");
+     console.log(languageArray);
+     console.log(percentageValues[0]);
 
-    for (var i = 0; i < percentageValues.length; i++) {
-        totalPercentage += percentageValues[i]
-    }
+     for (var i = 0; i < percentageValues.length; i++) {
+     totalPercentage += percentageValues[i]
+     }
 
-    console.log(totalPercentage);
+     console.log(totalPercentage);
 
-    it("An odd number of percentage still adds up to 100.", function() {
-        expect(totalPercentage).toBe(100);
-    });*/
+     it("An odd number of percentage still adds up to 100.", function() {
+     expect(totalPercentage).toBe(100);
+     });*/
 
 });
 
@@ -132,8 +132,8 @@ describe("Runs within a defined application.", function() {
             var appTest = new app.Application({model:{
                 validationError:"Model Invalid Test Error Message",
                 isValid: function() {
-                return false;
-            }}});
+                    return false;
+                }}});
         } ).toThrow(new Error("Model Invalid Test Error Message"));
 
         app.current = {isStarted: true};
@@ -144,18 +144,26 @@ describe("Runs within a defined application.", function() {
                 singleInstance: true,
                 model:{  isValid: function() {
                     return true;
-                }}});
-        } ).toThrow(new Error("This instance cannot be made a single instance as another single instance is already running."));
+                },attributes: {
+                    singleInstance: true
+                }
+                }});
+        } ).toThrow();
 
         expect( function(){
             var appTest = new app.Application({
                 singleInstance: false,
                 model:{  isValid: function() {
                     return true;
-                }}});
-        } ).toThrow(new Error("Another instance of this application has already been started, cannot start another."));
+                },
+                    attributes: {
+                        singleInstance: true
+                    }
 
-        delete app.current;
+                }});
+        } ).toThrow();
+
+        app.current = null;
 
     });
 
@@ -267,8 +275,6 @@ describe("Run an application lifecycle.", function() {
     var testApplication = null;
     var testSession = null;
 
-
-
     $("body").append($("<div id=\"appContainer\" style=\"display: none;\"></div>"));
 
     it("Startup.", function() {
@@ -280,8 +286,22 @@ describe("Run an application lifecycle.", function() {
         testApplication = app.StartNewApplication("#appContainer", "sample", testSession);
 
         expect(testApplication).not.toBe(null);
-        expect(app.current).toBe(undefined);
+        expect(app.current).not.toBe(null);
         expect(testApplication.isStarted).toBe(true);
+
+    });
+
+    it("Render a welcome screen and search for a username.", function() {
+        expect( function(){
+            testApplication.router.options.controller.index();
+        }).not.toThrow();
+
+        var e = jQuery.Event("keydown");
+        e.which = 13; // # Enter key
+
+        expect( function(){
+            testApplication.rootRegion.currentView.$el.find("input").val("sample").trigger(e);
+        }).not.toThrow();
 
     });
 
@@ -291,7 +311,6 @@ describe("Run an application lifecycle.", function() {
         }).not.toThrow();
 
     });
-
 
     it("Render repository details.", function() {
         var testRepo = testSession.get("repositories").first();
@@ -308,17 +327,15 @@ describe("Run an application lifecycle.", function() {
 
     });
 
+    it("Handle a non-existant repository.", function() {
+        expect( function(){
+            testApplication.router.options.controller.viewRepositoryDetailById("sample", 0);
+        }).not.toThrow();
+    });
 
     it("Render a index by username.", function() {
         expect( function(){
             testApplication.router.options.controller.indexWithUsername("sample");
-        }).not.toThrow();
-
-    });
-
-    it("Render a welcome screen.", function() {
-        expect( function(){
-            testApplication.router.options.controller.index();
         }).not.toThrow();
 
     });
@@ -336,6 +353,36 @@ describe("Run an application lifecycle.", function() {
         expect( function(){
             testApplication.router.options.controller.defaultAction("example");
         }).not.toThrow();
+
+    });
+
+    it("Load data when necessary.", function() {
+
+        var fetchCompleteFunctions = {
+            success: function() {
+
+            },
+            error: function() {
+
+            }
+        };
+
+        var testGitHubUser = {
+            fetch: function(options) {
+
+                options.error();
+
+                return null;
+            }
+        };
+
+        spyOn(testGitHubUser, "fetch");
+
+        testSession.set("gitHubUser", testGitHubUser);
+
+        testApplication.router.options.controller.executeUserLoad();
+
+        expect(testGitHubUser.fetch).toHaveBeenCalled();
 
     });
 

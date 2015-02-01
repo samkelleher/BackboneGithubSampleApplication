@@ -190,7 +190,7 @@ app.GlobalController = Marionette.Controller.extend({
 
         if (!repository) {
             this.application.router.navigate("user/" + username + "/repository/" + repositoryId);
-            this.application.rootLayout.content.show(new app.ContentErrorView({model: new app.Error({message:"A repository with id '" + id + "' was not found."})}));
+            this.application.rootLayout.content.show(new app.ContentErrorView({model: new app.Error({message:"A repository with id '" + repositoryId + "' was not found."})}));
             return;
         }
 
@@ -231,7 +231,7 @@ app.Application = Marionette.Application.extend({
             throw new Error(this.options.model.validationError);
         }
 
-        if (this.options.singleInstance) {
+        if (this.options.model.attributes.singleInstance) {
             if (app.current && app.current.isStarted) {
                 throw new Error("This instance cannot be made a single instance as another single instance is already running.");
             }
@@ -251,7 +251,7 @@ app.Application = Marionette.Application.extend({
         this.removeApplicationLayout();
         this.stopPushState();
 
-        if (this.options.singleInstance) {
+        if (this.model.attributes.singleInstance) {
             app.current = null;
         }
 
@@ -284,7 +284,7 @@ app.Application = Marionette.Application.extend({
     originalUrl: "",
     setupPushState: function() {
 
-        if (!this.model.get("singleInstance")) {
+        if (!this.model.attributes.singleInstance) {
             // When running more than one instance, we don't want to alter the URL as it would cause conflicts.
             return;
         }
