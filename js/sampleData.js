@@ -12,7 +12,6 @@ app.AttachSampleSession = function(session) {
     session.get("gitHubUser").set({
         "login": "sample",
         "id": 110953,
-        "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
         "gravatar_id": "",
         "url": "https://api.github.com/users/sample",
         "html_url": "https://github.com/sample",
@@ -50,7 +49,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "aaronfrost",
                 "id": 662832,
-                "avatar_url": "https://avatars.githubusercontent.com/u/277884?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/aaronfrost",
                 "html_url": "https://github.com/aaronfrost",
@@ -137,7 +135,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -224,7 +221,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -311,7 +307,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -398,7 +393,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -485,7 +479,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -572,7 +565,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -659,7 +651,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -746,7 +737,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -833,7 +823,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -920,7 +909,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -1007,7 +995,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -1094,7 +1081,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -1181,7 +1167,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -1268,7 +1253,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -1355,7 +1339,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -1442,7 +1425,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -1529,7 +1511,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -1616,7 +1597,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -1703,7 +1683,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -1790,7 +1769,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -1877,7 +1855,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -1964,7 +1941,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -2051,7 +2027,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -2138,7 +2113,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -2225,7 +2199,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -2312,7 +2285,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -2399,7 +2371,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -2486,7 +2457,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -2573,7 +2543,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -2660,7 +2629,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -2747,7 +2715,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -2834,7 +2801,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -2921,7 +2887,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -3008,7 +2973,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -3095,7 +3059,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -3182,7 +3145,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -3269,7 +3231,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -3356,7 +3317,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -3443,7 +3403,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -3530,7 +3489,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -3617,7 +3575,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -3704,7 +3661,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -3791,7 +3747,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -3878,7 +3833,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -3965,7 +3919,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -4052,7 +4005,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -4139,7 +4091,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -4226,7 +4177,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -4313,7 +4263,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -4400,7 +4349,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -4487,7 +4435,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -4574,7 +4521,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -4661,7 +4607,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -4748,7 +4693,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -4835,7 +4779,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -4922,7 +4865,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -5009,7 +4951,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -5096,7 +5037,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -5183,7 +5123,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -5270,7 +5209,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -5357,7 +5295,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -5444,7 +5381,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -5531,7 +5467,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -5618,7 +5553,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -5705,7 +5639,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -5792,7 +5725,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -5879,7 +5811,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -5966,7 +5897,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -6053,7 +5983,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -6140,7 +6069,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -6227,7 +6155,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -6314,7 +6241,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -6401,7 +6327,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -6488,7 +6413,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -6575,7 +6499,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -6662,7 +6585,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -6749,7 +6671,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -6836,7 +6757,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -6923,7 +6843,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -7010,7 +6929,7 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
+                "y": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -7097,7 +7016,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -7184,7 +7102,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -7271,7 +7188,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -7358,7 +7274,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -7445,7 +7360,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -7532,7 +7446,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -7619,7 +7532,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -7706,7 +7618,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -7793,7 +7704,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -7880,7 +7790,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -7967,7 +7876,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -8054,7 +7962,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -8141,7 +8048,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -8228,7 +8134,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -8315,7 +8220,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -8402,7 +8306,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -8489,7 +8392,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -8576,7 +8478,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",
@@ -8663,7 +8564,6 @@ app.AttachSampleSession = function(session) {
             "owner": {
                 "login": "sample",
                 "id": 110953,
-                "avatar_url": "https://avatars.githubusercontent.com/u/110953?v=3",
                 "gravatar_id": "",
                 "url": "https://api.github.com/users/sample",
                 "html_url": "https://github.com/sample",

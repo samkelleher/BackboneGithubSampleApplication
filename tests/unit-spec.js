@@ -265,12 +265,19 @@ describe("Use query strings.", function() {
 describe("Run an application lifecycle.", function() {
 
     var testApplication = null;
+    var testSession = null;
+
+
 
     $("body").append($("<div id=\"appContainer\" style=\"display: none;\"></div>"));
 
     it("Startup.", function() {
 
-        testApplication = app.StartNewApplication("#appContainer", "sample", new app.ApplicationSession({singleInstance: false, username:"sample", baseContainer:"#appContainer"}));
+        testSession = new app.ApplicationSession({singleInstance: true, username:"sample", baseContainer:"#appContainer"});
+
+        testSession = app.AttachSampleSession(testSession);
+
+        testApplication = app.StartNewApplication("#appContainer", "sample", testSession);
 
         expect(testApplication).not.toBe(null);
         expect(app.current).toBe(undefined);
@@ -285,9 +292,33 @@ describe("Run an application lifecycle.", function() {
 
     });
 
+
+    it("Render repository details.", function() {
+        var testRepo = testSession.get("repositories").first();
+
+        var testRepoId = testRepo.id;
+
+        expect( function(){
+            testApplication.router.options.controller.viewRepositoryDetail(testRepo);
+        }).not.toThrow();
+
+        expect( function(){
+            testApplication.router.options.controller.viewRepositoryDetailById("sample", testRepoId);
+        }).not.toThrow();
+
+    });
+
+
     it("Render a index by username.", function() {
         expect( function(){
             testApplication.router.options.controller.indexWithUsername("sample");
+        }).not.toThrow();
+
+    });
+
+    it("Render a welcome screen.", function() {
+        expect( function(){
+            testApplication.router.options.controller.index();
         }).not.toThrow();
 
     });

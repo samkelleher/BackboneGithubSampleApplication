@@ -281,6 +281,7 @@ app.Application = Marionette.Application.extend({
 
     },
     historyStarted: false,
+    originalUrl: "",
     setupPushState: function() {
 
         if (!this.model.get("singleInstance")) {
@@ -288,11 +289,13 @@ app.Application = Marionette.Application.extend({
             return;
         }
 
-        var root = window.location.pathname || "/";
+        var root = window.location.pathname;
+
         var defaultFileName = "index.html";
         var indexOfdefaultFileName = root.indexOf(defaultFileName, root.length - defaultFileName.length);
 
         if (indexOfdefaultFileName !== -1) {
+            this.originalUrl = defaultFileName;
             root =  root.substring(0, indexOfdefaultFileName);
         }
 
@@ -300,6 +303,7 @@ app.Application = Marionette.Application.extend({
     },
     stopPushState: function() {
         if (this.historyStarted) {
+            this.router.navigate(this.originalUrl);
             this.historyStarted = false;
             Backbone.history.stop();
         }

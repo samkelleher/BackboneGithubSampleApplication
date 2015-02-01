@@ -48,7 +48,7 @@ module.exports = function (grunt) {
                 dest: 'dist/libs.js'
             },
             full: {
-                src: ['dist/libs.js','js/models.js','js/templates.js','js/views.js','js/app.js'],
+                src: ['dist/libs.js', 'js/sampleData.js', 'js/models.js', 'js/templates.js', 'js/views.js', 'js/app.js'],
                 dest: 'dist/app.debug.js'
             }
         },
@@ -105,6 +105,7 @@ module.exports = function (grunt) {
                     'bower_components/marionette/lib/backbone.marionette.js',
                     'bower_components/moment/moment.js',
                     "tests/helpers.js",
+                    "js/sampleData.js",
                     "js/models.js",
                     "js/app.js",
                     "js/templates.js",
@@ -127,7 +128,7 @@ module.exports = function (grunt) {
         cssmin: {
             target: {
                 files: {
-                    "dist/app.min.css":["bower_components/octicons/octicons/octicons.css", "css/grid.css","css/app.css"]
+                    "dist/app.min.css":["bower_components/octicons/octicons/octicons.css", "css/grid.css", "css/app.css"]
                 }
             }
         },

@@ -261,16 +261,19 @@ app.RepositoryDetailsLayout =  Marionette.LayoutView.extend({
         var languages = this.model.get("_languages");
 
         if (!languages) {
-            languages = new app.RepositoryLanguageDetails().withUrl(this.model.get("languages_url"));
-
+            languages = this.model.getLanguageModel();
             var rateLimit = this.options.session.get("rateLimit");
             this.model.set("_languages", languages);
             rateLimit.observeRateLimitedObject(languages);
-            languages.fetch({
-                error: function() {
 
-                }
-            });
+            if (!this.options.session.get("preloaded")) {
+                languages.fetch({
+                    error: function() {
+
+                    }
+                });
+            }
+
         }
 
         this.repoDetailsLanguagesContainer.show(new app.RepositoryLanguagesListView({model: languages, repository: this.model, session: this.options.session}));

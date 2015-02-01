@@ -113,6 +113,8 @@ __p += '\r\n\r\n<div class="row">\r\n    <div class="col-xs-12">GitHub does not 
 __p += '\r\n\r\n';
  } else if (model.isFetching) { ;
 __p += '\r\n\r\n<div class="row">\r\n    <div class="col-xs-12">Loading language data...</div>\r\n</div>\r\n\r\n';
+ } else { ;
+__p += '\r\n\r\n<div class="row">\r\n    <div class="col-xs-12">Language data is not available.</div>\r\n</div>\r\n\r\n';
  } ;
 
 return __p
