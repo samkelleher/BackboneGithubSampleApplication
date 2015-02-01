@@ -141,7 +141,6 @@ describe("Runs within a defined application.", function() {
         expect( function(){
 
             var appTest = new app.Application({
-                singleInstance: true,
                 model:{  isValid: function() {
                     return true;
                 },attributes: {
@@ -152,12 +151,11 @@ describe("Runs within a defined application.", function() {
 
         expect( function(){
             var appTest = new app.Application({
-                singleInstance: false,
                 model:{  isValid: function() {
                     return true;
                 },
                     attributes: {
-                        singleInstance: true
+                        singleInstance: false
                     }
 
                 }});
@@ -340,6 +338,14 @@ describe("Run an application lifecycle.", function() {
 
     });
 
+    it("Switch user.", function() {
+        expect( function(){
+            testSession.unset("username");
+            testApplication.router.options.controller.indexWithUsername("sample");
+        }).not.toThrow();
+
+    });
+
     it("Display a 404 page.", function() {
 
         expect( function(){
@@ -356,27 +362,18 @@ describe("Run an application lifecycle.", function() {
 
     });
 
-    it("Load data when necessary.", function() {
-
-        var fetchCompleteFunctions = {
-            success: function() {
-
-            },
-            error: function() {
-
-            }
-        };
+    it("Load data when necessary, handle a timeout.", function() {
 
         var testGitHubUser = {
             fetch: function(options) {
 
-                options.error();
+                options.error({ }, { statusText: "timeout" }, { });
 
                 return null;
             }
         };
 
-        spyOn(testGitHubUser, "fetch");
+        spyOn(testGitHubUser, "fetch").and.callThrough();
 
         testSession.set("gitHubUser", testGitHubUser);
 
@@ -385,6 +382,69 @@ describe("Run an application lifecycle.", function() {
         expect(testGitHubUser.fetch).toHaveBeenCalled();
 
     });
+
+    it("Load data when necessary, handle a 404.", function() {
+
+        var testGitHubUser = {
+            fetch: function(options) {
+
+                options.error({ }, { status: 404 }, { });
+
+                return null;
+            }
+        };
+
+        spyOn(testGitHubUser, "fetch").and.callThrough();
+
+        testSession.set("gitHubUser", testGitHubUser);
+
+        testApplication.router.options.controller.executeUserLoad();
+
+        expect(testGitHubUser.fetch).toHaveBeenCalled();
+
+    });
+    it("Load data when necessary, handle a 403.", function() {
+
+        var testGitHubUser = {
+            fetch: function(options) {
+
+                options.error({ }, { status: 403 }, { });
+
+                return null;
+            }
+        };
+
+        spyOn(testGitHubUser, "fetch").and.callThrough();
+
+        testSession.set("gitHubUser", testGitHubUser);
+
+        testApplication.router.options.controller.executeUserLoad();
+
+        expect(testGitHubUser.fetch).toHaveBeenCalled();
+
+    });
+
+    it("Load data when necessary, handle a 500.", function() {
+
+        var testGitHubUser = {
+            fetch: function(options) {
+
+                options.error({ }, { status: 500 }, { });
+
+                return null;
+            }
+        };
+
+        spyOn(testGitHubUser, "fetch").and.callThrough();
+
+        testSession.set("gitHubUser", testGitHubUser);
+
+        testApplication.router.options.controller.executeUserLoad();
+
+        expect(testGitHubUser.fetch).toHaveBeenCalled();
+
+    });
+
 
     it("Stop.", function() {
 

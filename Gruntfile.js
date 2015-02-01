@@ -64,6 +64,7 @@ module.exports = function (grunt) {
         },
         clean: {
             dist: ["dist/*.*"],
+            docco: ["docs/docco/*"],
             build: ["dist/libs.js","dist/app.debug.js"]
         },
         copy: {
@@ -166,6 +167,16 @@ module.exports = function (grunt) {
                     'dist/index.html': ['index.html']
                 }
             }
+        },
+        docco: {
+            debug: {
+                src: ["js/models.js",
+                    "js/app.js",
+                    "js/views.js",],
+                options: {
+                    output: 'docs/docco/'
+                }
+            }
         }
     });
 
@@ -181,6 +192,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-processhtml');
+    grunt.loadNpmTasks('grunt-docco');
 
     grunt.registerTask('test', ['jshint', 'karma:run', 'coveralls']);
 

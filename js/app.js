@@ -163,6 +163,7 @@ app.GlobalController = Marionette.Controller.extend({
                 if (username == "sample") {
                     app.AttachSampleSession(this.session);
                 } else {
+                    this.session.set("username", username);
                     this.executeUserLoad();
                 }
 
