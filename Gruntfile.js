@@ -99,8 +99,11 @@ module.exports = function (grunt) {
                     "js/views.js": "coverage"
                 },
                 coverageReporter: {
-                    type: "lcov",
-                    dir: "tests/coverage"
+                    dir: "tests/coverage",
+                    reporters: [
+                        { type: 'html', subdir: 'report-html' },
+                        { type: 'lcovonly', subdir: 'report-lcov' }
+                        ]
                 },
                 files: [
                     'bower_components/jquery/dist/jquery.js',
@@ -126,7 +129,7 @@ module.exports = function (grunt) {
         },
         coveralls: {
             options: {
-                coverageDir: "tests/coverage"
+                coverageDir: "tests/coverage/report-lcov"
             }
         },
         cssmin: {

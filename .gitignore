@@ -74,3 +74,4 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 .coveralls.yml
+tests/coverage/report-lcov/lcov.info
