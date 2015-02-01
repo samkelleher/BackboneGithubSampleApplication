@@ -28,6 +28,16 @@ Written against v3 of the [GitHub API](https://developer.github.com/v3/).
 
 Both Grunt and Bower can installed automatically by running the `npm install` command as above.
 
+### Building
+
+You can run the full unminified version by just opening the root [index.html](index.html). There is also a [/dist/](dist) directory that contains the full compiled version (minified css/js etc), this directory contains all the files needed to run the application.
+
+To regenrate this directory run `grunt build`.
+
+The debug template also always uses pre-compiled view templates from the auto-generated [js/templates.js](js/templates.js). The content of this file consists of all the un-compiled html views that are found in the [/views/](views) folder.
+
+You can manually force a template compilation by running `grunt jst`. Alternatively, if you simply run `grunt watch` when you start working on the application, the templates.js file will be regenerated automatically as soon as any changes to the view folder are made.
+
 ### Testing
 Unit and Integration tests can be performed separately. By default, only unit tests are performed.
 

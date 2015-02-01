@@ -3,7 +3,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         jshint: {
-            files: ['js/*.js'],
+            files: ['js/models.js','js/views.js','js/app.js'],
             options: {
                 globals: {
                     jQuery: true,
@@ -107,6 +107,7 @@ module.exports = function (grunt) {
                     "tests/helpers.js",
                     "js/models.js",
                     "js/app.js",
+                    "js/templates.js",
                     "js/views.js",
 
                     "tests/unit-spec.js"

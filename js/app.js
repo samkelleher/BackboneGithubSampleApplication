@@ -290,7 +290,7 @@ app.Application = Marionette.Application.extend({
             var indexOfdefaultFileName = root.indexOf(defaultFileName, root.length - defaultFileName.length);
 
             if (indexOfdefaultFileName !== -1) {
-                root =  root.substring(0, indexOfdefaultFileName)
+                root =  root.substring(0, indexOfdefaultFileName);
             }
 
         }
