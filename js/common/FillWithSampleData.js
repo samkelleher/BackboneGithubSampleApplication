@@ -1,6 +1,7 @@
-var app = window.app || {};
+define(function() {
+    'use strict';
 
-app.AttachSampleSession = function(session) {
+    return function(session) {
     session.set({username: "sample", preloaded: true});
 
     session.get("rateLimit").triggerRateLimitUpdate(1000,999,moment.utc().add(1, "hours").seconds());
@@ -8647,3 +8648,5 @@ app.AttachSampleSession = function(session) {
 
     return session;
 };
+
+});

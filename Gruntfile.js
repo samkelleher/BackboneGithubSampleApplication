@@ -93,10 +93,7 @@ module.exports = function (grunt) {
                 frameworks: ["jasmine"],
                 plugins: ["karma-jasmine", "karma-phantomjs-launcher", "karma-coverage"],
                 preprocessors: {
-                    // Glob pattens don't work here because of structure
-                    "js/app.js": "coverage",
-                    "js/models.js": "coverage",
-                    "js/views.js": "coverage"
+                    "js/*.js": "coverage"
                 },
                 coverageReporter: {
                     dir: "tests/coverage",
@@ -112,12 +109,6 @@ module.exports = function (grunt) {
                     'bower_components/marionette/lib/backbone.marionette.js',
                     'bower_components/moment/moment.js',
                     "tests/helpers.js",
-                    "js/sampleData.js",
-                    "js/models.js",
-                    "js/app.js",
-                    "js/templates.js",
-                    "js/views.js",
-
                     "tests/unit-spec.js"
                 ]
             },
@@ -145,13 +136,27 @@ module.exports = function (grunt) {
                     "js/templates.js": ["views/*.html"]
                 },
                 options: {
-                    namespace: "app.templates",
+                    namespace: "templates",
+                    amd: true,
                     processName: function(filepath) {
                         return filepath.substring(6, filepath.length - 5);
+                    },
+                    processContent: function(src) {
+                        return src.replace(/\r?\n|\r/gm, '').replace(/\s{2,}/gm, ' ').replace(/>\s+</gm, '><');
                     },
                     templateSettings: {
                      variable: "model"
                     }
+                }
+            }
+        },
+        requirejs: {
+            compile: {
+                options: {
+                    baseUrl: "js",
+                    mainConfigFile: "path/to/config.js",
+                    name: "path/to/almond", // assumes a production build using almond
+                    out: "js/optimized.js"
                 }
             }
         },
