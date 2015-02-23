@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>views.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="app.html">
+                app.js
+              </a>
+            
+              
+              <a class="source" href="models.html">
+                models.js
+              </a>
+            
+              
+              <a class="source" href="views.html">
+                views.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>views.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> app = <span class="hljs-built_in">window</span>.app || {};
+
+app.ApplicationLayout = Marionette.LayoutView.extend({
+    regions: {
+        content: <span class="hljs-string">"section.content"</span>,
+        header: <span class="hljs-string">"header.header"</span>,
+        footer: <span class="hljs-string">"section.footer"</span>
+    },
+    template: app.templates.AppLayout,
+    attributes: {
+        <span class="hljs-string">"class"</span>:<span class="hljs-string">"profileAppWrapper"</span>
+    }
+});
+
+app.HeaderView = Marionette.ItemView.extend({
+    template: app.templates.HeaderView,
+    attributes: {
+        <span class="hljs-string">"class"</span>:<span class="hljs-string">"row"</span>
+    },
+    initialize: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.model) {
+            <span class="hljs-keyword">this</span>.collection = <span class="hljs-keyword">this</span>.model.get(<span class="hljs-string">"repositories"</span>);
+
+            <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.collection) {
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">"The header view requires access to the underlying collection to function if there is a model set."</span>);
+            }
+        }
+
+    },
+    userProfileUpdated: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+    },
+    modelEvents: {
+        <span class="hljs-string">"change"</span>:<span class="hljs-string">"sessionUpdates"</span>,
+        <span class="hljs-string">"change:gitHubUser"</span>:<span class="hljs-string">"userProfileUpdated"</span>
+    },
+    collectionEvents: {
+        <span class="hljs-string">"requestAllPages"</span>:<span class="hljs-string">"setLoadingState"</span>,
+        <span class="hljs-string">"requestAllPagesProgress"</span>:<span class="hljs-string">"setLoadingStateWithProgress"</span>,
+        <span class="hljs-string">"syncAllPages"</span>:<span class="hljs-string">"updateStatus"</span>
+    },
+    ui: {
+        <span class="hljs-string">"title"</span>:<span class="hljs-string">"h2"</span>
+    },
+    sessionUpdates: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>console.log(“session updated “, this.model.toJSON());</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    },
+    updateStatus: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">this</span>.setStatusTitle(<span class="hljs-string">""</span>);
+    },
+    setLoadingState: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+        <span class="hljs-keyword">var</span> username = <span class="hljs-keyword">this</span>.model.get(<span class="hljs-string">"username"</span>);
+
+        <span class="hljs-keyword">if</span> (username) {
+            <span class="hljs-keyword">this</span>.setStatusTitle(<span class="hljs-string">"Loading @"</span> + username + <span class="hljs-string">"..."</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">this</span>.setStatusTitle(<span class="hljs-string">"Loading..."</span>);
+        }
+
+    },
+    setLoadingStateWithProgress: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(progress)</span> </span>{
+        <span class="hljs-keyword">this</span>.setStatusTitle(<span class="hljs-string">"Loading ("</span> + progress.totalRepositoryCount + <span class="hljs-string">" loaded so far)..."</span>);
+    },
+    setStatusTitle: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(newTitle)</span> </span>{
+        <span class="hljs-keyword">this</span>.statusTitle = newTitle;
+        <span class="hljs-keyword">this</span>.render();
+    },
+    statusTitle: <span class="hljs-string">""</span>,
+    templateHelpers: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> extras = {
+            _statusTitle: <span class="hljs-keyword">this</span>.statusTitle,
+            _name: <span class="hljs-string">"Welcome"</span>
+        };
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.model) {
+            <span class="hljs-keyword">var</span> gitHubUser = <span class="hljs-keyword">this</span>.model.get(<span class="hljs-string">"gitHubUser"</span>);
+
+            <span class="hljs-keyword">if</span> (gitHubUser) {
+                extras._name = gitHubUser.get(<span class="hljs-string">"name"</span>);
+                extras._avatar_url = gitHubUser.get(<span class="hljs-string">"avatar_url"</span>);
+            }
+        }
+
+        <span class="hljs-keyword">return</span> extras;
+    }
+});
+
+app.RepositoryListViewItem = Marionette.ItemView.extend({
+    template: app.templates.RepositoryListViewItem,
+    attributes: {
+        <span class="hljs-string">"class"</span>:<span class="hljs-string">"row"</span>
+    },
+    events: {
+        <span class="hljs-string">"click"</span>:<span class="hljs-string">"selectDetailedView"</span>
+    },
+    selectDetailedView: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        e.preventDefault();
+        <span class="hljs-keyword">this</span>.trigger(<span class="hljs-string">"selectedItem"</span>, <span class="hljs-keyword">this</span>.model);
+    }
+});
+
+app.FooterView = Marionette.ItemView.extend({
+    template: app.templates.ListFooterView,
+    attributes: {
+        <span class="hljs-string">"class"</span>:<span class="hljs-string">"row"</span>
+    },
+    templateHelpers: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> extras = {
+            _hasRateLimit: <span class="hljs-literal">false</span>
+        };
+
+        <span class="hljs-keyword">var</span> requestLimitRemaining = <span class="hljs-keyword">this</span>.rateLimit.get(<span class="hljs-string">"requestLimitRemaining"</span>);
+        <span class="hljs-keyword">var</span> requestLimit = <span class="hljs-keyword">this</span>.rateLimit.get(<span class="hljs-string">"requestLimit"</span>);
+        <span class="hljs-keyword">var</span> requestLimitExpires = <span class="hljs-keyword">this</span>.rateLimit.get(<span class="hljs-string">"requestLimitExpires"</span>);
+
+        <span class="hljs-keyword">if</span> (requestLimitRemaining !== <span class="hljs-literal">null</span> &amp;&amp; requestLimit !== <span class="hljs-literal">null</span>) {
+            extras._hasRateLimit = <span class="hljs-literal">true</span>;
+            extras._requestLimitRemaining = requestLimitRemaining;
+            extras._requestLimit = requestLimit;
+
+            <span class="hljs-keyword">var</span> timeLeft = moment.duration(-moment.utc().diff(requestLimitExpires));
+
+            extras._secondsLeft = timeLeft.asSeconds();
+            extras._minutesLeft = timeLeft.asMinutes();
+            extras._humanizeLeft = timeLeft.humanize(<span class="hljs-literal">true</span>);
+
+            extras._resetsAt = requestLimitExpires.format(<span class="hljs-string">"h:mma"</span>);
+        } <span class="hljs-keyword">else</span> {
+            extras._isPreloaded = <span class="hljs-keyword">this</span>.model.get(<span class="hljs-string">"preloaded"</span>) || <span class="hljs-literal">false</span>;
+
+        }
+
+        <span class="hljs-keyword">return</span> extras;
+    },
+    updatedRateLimit: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">this</span>.render();
+    },
+    initialize: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">this</span>.rateLimit = <span class="hljs-keyword">this</span>.model.get(<span class="hljs-string">"rateLimit"</span>);
+        <span class="hljs-keyword">this</span>.listenTo(<span class="hljs-keyword">this</span>.rateLimit, <span class="hljs-string">"rateLimitUpdated"</span>, <span class="hljs-keyword">this</span>.updatedRateLimit);
+    }
+});
+
+app.ContentErrorView = Marionette.ItemView.extend({
+    template: app.templates.ContentErrorView,
+    attributes: {
+        <span class="hljs-string">"class"</span>:<span class="hljs-string">"row"</span>
+    }
+});
+
+app.RepositoryListCollectionView = Marionette.CollectionView.extend({
+    childView: app.RepositoryListViewItem,
+    childEvents: {
+        selectedItem: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, selectedItem)</span> </span>{
+            <span class="hljs-keyword">this</span>.trigger(<span class="hljs-string">"selectedItem"</span>, selectedItem);
+        }
+    },
+    attributes: {
+        <span class="hljs-string">"class"</span>:<span class="hljs-string">"repoListCollectionContainer"</span>
+    },
+    initialize: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.collection.isSynced) {
+            <span class="hljs-keyword">this</span>.trimPagesAfterFullSync();
+        }
+
+    },
+    trimPagesAfterFullSync: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">this</span>.collection.keepFirstTwenty();
+    },
+    collectionEvents: {
+        <span class="hljs-string">"syncAllPages"</span>:<span class="hljs-string">"trimPagesAfterFullSync"</span>
+    }
+});
+
+app.RepositoryDetailsView =  Marionette.ItemView.extend({
+    template: app.templates.RepositoryDetailsView,
+        attributes: {
+            <span class="hljs-string">"class"</span>:<span class="hljs-string">"repoDetailsContainer"</span>
+        },
+    templateHelpers: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+        <span class="hljs-keyword">var</span> extras = {};
+
+        <span class="hljs-keyword">var</span> updated_at = <span class="hljs-keyword">this</span>.model.get(<span class="hljs-string">"updated_at"</span>);
+
+        <span class="hljs-keyword">if</span>(updated_at) {
+            extras._lastUpdated = <span class="hljs-string">"Last updated "</span> + moment.utc(updated_at).fromNow();
+        } <span class="hljs-keyword">else</span> {
+            extras._lastUpdated = <span class="hljs-string">"Last update information not available. "</span>;
+        }
+
+
+
+        <span class="hljs-keyword">return</span> extras;
+    }
+});
+
+app.RepositoryLanguagesListView =  Marionette.ItemView.extend({
+    attributes: {
+        <span class="hljs-string">"class"</span>:<span class="hljs-string">"repoLanguagesContainer"</span>
+    },
+    template: app.templates.RepositoryLanguagesListView,
+    templateHelpers: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+        <span class="hljs-keyword">var</span> extras = {
+            isFetched: <span class="hljs-keyword">this</span>.model.isFetched,
+            isFetching: <span class="hljs-keyword">this</span>.model.isFetching,
+            fetchError: <span class="hljs-keyword">this</span>.model.fetchError
+        };
+
+        <span class="hljs-keyword">var</span> languageData = <span class="hljs-keyword">this</span>.model.get(<span class="hljs-string">"languageData"</span>);
+
+        <span class="hljs-keyword">if</span> (languageData) {
+            extras._numberOfLanguages = languageData.length;
+
+            <span class="hljs-keyword">if</span> (extras._numberOfLanguages &gt; <span class="hljs-number">12</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Can’t display each one in a column.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            } <span class="hljs-keyword">else</span> {
+                extras._columnSize = <span class="hljs-built_in">Math</span>.floor(<span class="hljs-number">12</span> / extras._numberOfLanguages);
+
+                <span class="hljs-keyword">if</span> ((extras._columnSize * languageData._numberOfLanguages) &lt; <span class="hljs-number">12</span>) {
+                    extras._finalFillerColumn = <span class="hljs-number">12</span> - (extras._columnSize * extras._numberOfLanguages);
+                } <span class="hljs-keyword">else</span> {
+                    extras._finalFillerColumn = <span class="hljs-number">0</span>;
+                }
+
+            }
+
+        }
+
+        <span class="hljs-keyword">return</span> extras;
+    },
+    modelEvents: {
+        <span class="hljs-string">"change"</span>:<span class="hljs-string">"render"</span>,
+        <span class="hljs-string">"sync"</span>:<span class="hljs-string">"render"</span>,
+        <span class="hljs-string">"error"</span>:<span class="hljs-string">"render"</span>
+    }
+});
+
+app.RepositoryDetailsLayout =  Marionette.LayoutView.extend({
+    template: app.templates.RepositoryDetailsLayout,
+    attributes: {
+        <span class="hljs-string">"class"</span>:<span class="hljs-string">"repositoryDetailsLayoutContainer"</span>
+    },
+    regions: {
+        repoDetailsSummaryHeaderContainer: <span class="hljs-string">".repoDetailsSummaryHeaderContainer"</span>,
+        repoDetailsLanguagesContainer: <span class="hljs-string">".repoDetailsLanguagesContainer"</span>
+    },
+    events: {
+        <span class="hljs-string">"click .cmdGoHome"</span>:<span class="hljs-string">"cmdGoHome"</span>
+    },
+    cmdGoHome: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        e.preventDefault();
+        <span class="hljs-keyword">this</span>.trigger(<span class="hljs-string">"goHome"</span>);
+    },
+    onShow: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">this</span>.repoDetailsSummaryHeaderContainer.show(<span class="hljs-keyword">new</span> app.RepositoryDetailsView({model: <span class="hljs-keyword">this</span>.model, session: <span class="hljs-keyword">this</span>.options.session}));
+
+        <span class="hljs-keyword">var</span> languages = <span class="hljs-keyword">this</span>.model.get(<span class="hljs-string">"_languages"</span>);
+
+        <span class="hljs-keyword">if</span> (!languages) {
+            languages = <span class="hljs-keyword">this</span>.model.getLanguageModel();
+            <span class="hljs-keyword">var</span> rateLimit = <span class="hljs-keyword">this</span>.options.session.get(<span class="hljs-string">"rateLimit"</span>);
+            <span class="hljs-keyword">this</span>.model.set(<span class="hljs-string">"_languages"</span>, languages);
+            rateLimit.observeRateLimitedObject(languages);
+
+            <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.options.session.get(<span class="hljs-string">"preloaded"</span>)) {
+                languages.fetch({
+                    error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+                    }
+                });
+            }
+
+        }
+
+        <span class="hljs-keyword">this</span>.repoDetailsLanguagesContainer.show(<span class="hljs-keyword">new</span> app.RepositoryLanguagesListView({model: languages, repository: <span class="hljs-keyword">this</span>.model, session: <span class="hljs-keyword">this</span>.options.session}));
+    }
+});
+
+app.UsageInstructionsView =  Marionette.ItemView.extend({
+    template: app.templates.UsageInstructionsView,
+    events: {
+        <span class="hljs-string">"click .cmdViewUser"</span>:<span class="hljs-string">"cmdViewUser"</span>,
+        <span class="hljs-string">"click .cmdSearch"</span>:<span class="hljs-string">"cmdSearch"</span>,
+        <span class="hljs-string">"keydown .txtSearchUsername"</span>:<span class="hljs-string">"cmdSearchOnEnter"</span>
+    },
+    ui: {
+        <span class="hljs-string">"txtSearchUsername"</span>:<span class="hljs-string">".txtSearchUsername"</span>
+    },
+    cmdSearchOnEnter: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        <span class="hljs-keyword">if</span>(e.which == <span class="hljs-number">13</span>) {
+            <span class="hljs-keyword">this</span>.cmdSearch();
+        }
+    },
+    isValidGitHubUsername: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(username)</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-regexp">/^\w[\w-]+$/</span>.test(username);
+    },
+    cmdSearch: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">var</span> username = <span class="hljs-keyword">this</span>.ui.txtSearchUsername.val();
+
+        <span class="hljs-keyword">if</span> (!username || !username.length) {
+            <span class="hljs-keyword">this</span>.ui.txtSearchUsername.focus();
+            <span class="hljs-keyword">return</span>;
+        }
+
+        username = username.trim();
+
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.isValidGitHubUsername(username)) {
+            <span class="hljs-keyword">this</span>.ui.txtSearchUsername.focus();
+            <span class="hljs-keyword">return</span>;
+        }
+
+        <span class="hljs-keyword">this</span>.trigger(<span class="hljs-string">"viewProfile"</span>, username);
+    },
+    cmdViewUser: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+        e.preventDefault();
+
+        <span class="hljs-keyword">var</span> username = $(e.currentTarget).attr(<span class="hljs-string">"href"</span>).split(<span class="hljs-string">"/"</span>)[<span class="hljs-number">1</span>];
+
+        <span class="hljs-keyword">this</span>.trigger(<span class="hljs-string">"viewProfile"</span>, username);
+    }
+});</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
