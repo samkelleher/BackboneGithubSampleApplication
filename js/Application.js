@@ -1,136 +1,151 @@
 define([
-    "backbone",
-    "marionette",
-    "routers/index",
-    "controllers/index",
-    "views/ApplicationLayout",
-    "models/ApplicationSession"
-], function(Backbone, Marionette, IndexRouter, IndexController, ApplicationLayout, ApplicationSession) {
-    'use strict';
+   "backbone",
+   "marionette",
+   "routers/index",
+   "controllers/index",
+   "views/ApplicationLayout",
+   "models/ApplicationSession"
+], function (Backbone, Marionette, IndexRouter, IndexController, ApplicationLayout, ApplicationSession) {
+   'use strict';
 
-    var application = null;
+   var application = null;
 
-    application = Marionette.Application.extend({
-        initialize: function () {
+   /**
+    *
+    */
+   application = Marionette.Application.extend({
+      initialize: function () {
 
-            if (!this.options.model) {
+         if (!this.options.model) {
 
-                throw new Error("An application needs a session object to be able to run.");
+            throw new Error("An application needs a session object to be able to run.");
+         }
+
+         if (!this.options.model.isValid()) {
+            throw new Error(this.options.model.validationError);
+         }
+
+         if (this.options.model.attributes.singleInstance) {
+            if (application.currentSingleInstance && application.currentSingleInstance.isStarted) {
+               throw new Error("This instance cannot be made a single instance as another single instance is already running.");
             }
 
-            if (!this.options.model.isValid()) {
-                throw new Error(this.options.model.validationError);
+            application.currentSingleInstance = this;
+         } else {
+            if (application.currentSingleInstance && application.currentSingleInstance.isStarted) {
+               throw new Error("Another instance of this application has already been started, cannot start another.");
             }
+         }
 
-            if (this.options.model.attributes.singleInstance) {
-                if (application.currentSingleInstance && application.currentSingleInstance.isStarted) {
-                    throw new Error("This instance cannot be made a single instance as another single instance is already running.");
-                }
+         this.router = new IndexRouter({controller: new IndexController({application: this, session: this.model})});
 
-                application.currentSingleInstance = this;
-            } else {
-                if (application.currentSingleInstance && application.currentSingleInstance.isStarted) {
-                    throw new Error("Another instance of this application has already been started, cannot start another.");
-                }
-            }
+      },
+      stop: function () {
+         this.triggerMethod('before:stop');
+         this.removeApplicationLayout();
+         this.stopPushState();
 
-            this.router = new IndexRouter({ controller: new IndexController({application: this, session: this.model}) });
+         if (this.model.attributes.singleInstance) {
+            application.currentSingleInstance = null;
+         }
 
-        },
-        stop: function() {
-            this.triggerMethod('before:stop');
-            this.removeApplicationLayout();
-            this.stopPushState();
+         this.triggerMethod('stop');
+      },
+      removeApplicationLayout: function () {
+         if (!this.isStarted || !this.rootRegion) return;
 
-            if (this.model.attributes.singleInstance) {
-                application.currentSingleInstance = null;
-            }
+         this.rootRegion.reset();
 
-            this.triggerMethod('stop');
-        },
-        removeApplicationLayout: function() {
-            if (!this.isStarted || !this.rootRegion) return;
+         this.rootRegion = null;
 
-            this.rootRegion.reset();
+         this.isStarted = false;
+      },
+      isStarted: false,
+      setupApplicationLayout: function () {
+         this.rootRegion = new Marionette.Region({
+            el: this.options.model.get("baseContainer")
+         });
 
-            this.rootRegion = null;
+         this.rootLayout = new ApplicationLayout();
 
-            this.isStarted = false;
-        },
-        isStarted: false,
-        setupApplicationLayout: function() {
-            this.rootRegion = new Marionette.Region({
-                el: this.options.model.get("baseContainer")
-            });
+         this.rootRegion.show(this.rootLayout);
 
-            this.rootLayout = new ApplicationLayout();
+      },
+      historyStarted: false,
+      originalUrl: "",
+      setupPushState: function () {
 
-            this.rootRegion.show( this.rootLayout );
+         if (!this.model.attributes.singleInstance) {
+            // When running more than one instance, we don't want to alter the URL as it would cause conflicts.
+            return;
+         }
 
-        },
-        historyStarted: false,
-        originalUrl: "",
-        setupPushState: function() {
+         var root = window.location.pathname;
 
-            if (!this.model.attributes.singleInstance) {
-                // When running more than one instance, we don't want to alter the URL as it would cause conflicts.
-                return;
-            }
+         var defaultFileName = "index.html";
+         var indexOfdefaultFileName = root.indexOf(defaultFileName, root.length - defaultFileName.length);
 
-            var root = window.location.pathname;
+         if (indexOfdefaultFileName !== -1) {
+            this.originalUrl = defaultFileName;
+            root = root.substring(0, indexOfdefaultFileName);
+         }
 
-            var defaultFileName = "index.html";
-            var indexOfdefaultFileName = root.indexOf(defaultFileName, root.length - defaultFileName.length);
+         this.historyStarted = Backbone.history.start({pushState: true, root: root});
+      },
+      stopPushState: function () {
+         if (this.historyStarted) {
+            this.router.navigate(this.originalUrl);
+            this.historyStarted = false;
+            Backbone.history.stop();
+         }
+      },
+      onStart: function () {
+         this.setupApplicationLayout();
+         this.setupPushState();
+         this.isStarted = true;
+      }
+   });
 
-            if (indexOfdefaultFileName !== -1) {
-                this.originalUrl = defaultFileName;
-                root =  root.substring(0, indexOfdefaultFileName);
-            }
+   /**
+    * Create a new instance of the application.
+    * @param baseContainerSelector
+    * @param username
+    * @param sessionToUse
+    * @returns {application}
+    * @constructor
+    */
+   application.CreateNewInstance = function (baseContainerSelector, username, sessionToUse) {
 
-            this.historyStarted = Backbone.history.start({ pushState: true, root: root });
-        },
-        stopPushState: function() {
-            if (this.historyStarted) {
-                this.router.navigate(this.originalUrl);
-                this.historyStarted = false;
-                Backbone.history.stop();
-            }
-        },
-        onStart: function() {
-            this.setupApplicationLayout();
-            this.setupPushState();
-            this.isStarted = true;
-        }
-    });
+      var sessionDefaults = {
+         singleInstance: true
+      };
 
-    application.CreateNewInstance = function(baseContainerSelector, username, sessionToUse) {
+      if (baseContainerSelector) {
+         sessionDefaults.baseContainer = baseContainerSelector;
+      }
 
-        var sessionDefaults = {
-            singleInstance: true
-        };
+      if (username) {
+         sessionDefaults.username = username;
+      }
 
-        if (baseContainerSelector) {
-            sessionDefaults.baseContainer = baseContainerSelector;
-        }
+      if (!sessionToUse) {
+         sessionToUse = new ApplicationSession(sessionDefaults);
+      }
 
-        if (username) {
-            sessionDefaults.username = username;
-        }
+      var applicationInstance = new application({model: sessionToUse});
 
-        if (!sessionToUse) {
-            sessionToUse = new ApplicationSession(sessionDefaults);
-        }
+      applicationInstance.start({});
 
-        var applicationInstance = new application({ model: sessionToUse });
+      return applicationInstance;
 
-        applicationInstance.start({});
+   };
 
-        return applicationInstance;
+   application.currentSingleInstance = null;
 
-    };
+   var test = function() {
+     application.CreateNewInstance();
+   };
 
-    application.currentSingleInstance = null;
-
-    return application;
+   return application;
 
 });
