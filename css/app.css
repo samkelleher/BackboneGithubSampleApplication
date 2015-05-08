@@ -2,7 +2,6 @@
     body {
         font-size: 18px;
     }
-
 }
 
 body {
@@ -22,18 +21,18 @@ body {
 }
 
 .repoLanguagesContainer {
-background-color: #f3f3ed;
+    background-color: #f3f3ed;
     padding: 15px;
     margin-bottom: 15px;
 }
 
 .repoLanguagesContainer .languageTitle {
-    font-width: bold;
-    font-size:1.5em;
+    font-weight: bold;
+    font-size: 1.5em;
 }
 
 .repoLanguagesContainer .languagePercentage {
-    font-size:1.8em;
+    font-size: 1.8em;
 }
 
 .repositoryLanguageItem {
@@ -56,11 +55,11 @@ header h1 {
 }
 
 header h2 {
-margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 header h3 {
-    margin-top:0;
+    margin-top: 0;
     font-weight: normal;
 }
 
@@ -68,7 +67,7 @@ header h3 {
     float: right;
 }
 
-section.footer {
+.footer {
     margin-top: 15px;
 }
 
@@ -76,16 +75,14 @@ section.content {
     padding-top: 0;
     padding-bottom: 15px;
 }
+
 section.content h3 {
     margin: 0;
+    color: #87a655;
 }
 
 .muted {
-    color:#9da394;
-}
-
-section.content h3 {
-    color: #87a655;
+    color: #9da394;
 }
 
 body {
@@ -109,8 +106,8 @@ a, a:visited {
 }
 
 section.content, .headerContainer header {
-    padding-left:15px;
-    padding-right:15px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .headerContainer {
