@@ -64,7 +64,7 @@ return __p
 
 this["templates"]["RepositoryDetailsView"] = function(model) {
 var __t, __p = '', __e = _.escape;
-__p += '<div class="row"><div class="col-xs-3 col-sm-9"><h3>' +
+__p += '<div class="row"><div class="col-xs-3 col-sm-9"><h3 class="repo-title">' +
 __e( model.name ) +
 '<span class="muted">&nbsp;&middot;&nbsp;' +
 __e( model._lastUpdated ) +
@@ -123,7 +123,7 @@ return __p
 
 this["templates"]["RepositoryListViewItem"] = function(model) {
 var __t, __p = '', __e = _.escape;
-__p += '<div class="col-xs-3 col-sm-9"><h3>' +
+__p += '<div class="col-xs-3 col-sm-9"><h3 class="repo-title">' +
 __e( model.name ) +
 '</h3></div><div class="col-xs-3 col-sm-1 muted"><span class="octicon octicon-star"></span>&nbsp;' +
 __e( model.stargazers_count ) +

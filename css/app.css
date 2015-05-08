@@ -76,7 +76,7 @@ section.content {
     padding-bottom: 15px;
 }
 
-section.content h3 {
+.repo-title {
     margin: 0;
     color: #87a655;
 }
