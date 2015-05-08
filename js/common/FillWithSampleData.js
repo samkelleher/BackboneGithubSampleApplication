@@ -1,10 +1,10 @@
-define(function() {
+define(["moment"], function (moment) {
     "use strict";
 
     return function(session) {
     session.set({username: "sample", preloaded: true});
 
-    session.get("rateLimit").triggerRateLimitUpdate(1000,999,moment.utc().add(1, "hours").seconds());
+    session.get("rateLimit").triggerRateLimitUpdate(1000, 999, moment.utc().add(1, "hours").seconds());
 
     session.get("gitHubUser").set({
         "login": "sample",
