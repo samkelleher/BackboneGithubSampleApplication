@@ -1,9 +1,11 @@
 define([
     "backbone",
     "models/Repository",
-    "common/utilities"
-], function(Backbone, Repository, CommonUtilities) {
-    'use strict';
+    "common/utilities",
+    "underscore",
+    "jquery"
+], function(Backbone, Repository, CommonUtilities, _, $) {
+    "use strict";
 
     return Backbone.Collection.extend({
         url: function() {
@@ -14,25 +16,29 @@ define([
         sortColumn: "stargazers_count,watchers_count",
 
         // Comma separated list corresponding to column list
-        sortDirection: 'desc,desc', // - [ 'asc'|'desc' ]
+        sortDirection: "desc,desc", // - [ "asc"|"desc" ]
         comparator: function( a, b ) {
 
-            if ( !this.sortColumn ) return 0;
+            if ( !this.sortColumn ) {
+                return 0;
+            }
 
-            var cols = this.sortColumn.split( ',' ),
-                dirs = this.sortDirection.split( ',' ),
+            var cols = this.sortColumn.split( "," ),
+                dirs = this.sortDirection.split( "," ),
                 cmp;
 
             // First column that does not have equal values
-            cmp = _.find( cols, function( c ) { return a.attributes[c] != b.attributes[c]; });
+            cmp = _.find( cols, function( c ) { return a.attributes[c] !== b.attributes[c]; });
 
-            // undefined means they're all equal, so we're done.
-            if ( !cmp ) return 0;
+            // undefined means they"re all equal, so we"re done.
+            if ( !cmp ) {
+                return 0;
+            }
 
             // Otherwise, use that column to determine the order
             // match the column sequence to the methods for ascending/descending
             // default to ascending when not defined.
-            if ( ( dirs[_.indexOf( cols, cmp )] || 'asc' ).toLowerCase() == 'asc' ) {
+            if ( ( dirs[_.indexOf( cols, cmp )] || "asc" ).toLowerCase() === "asc" ) {
                 return a.attributes[cmp] > b.attributes[cmp] ? 1 : -1;
             } else {
                 return a.attributes[cmp] < b.attributes[cmp] ? 1 : -1;
@@ -76,22 +82,22 @@ define([
             }
 
             // Split parts by comma
-            var parts = header.split(',');
+            var parts = header.split(",");
             var links = {};
             // Parse each part into a named link
             _.each(parts, function(p) {
-                var section = p.split(';');
-                if (section.length != 2) {
-                    throw new Error("section could not be split on ';'");
+                var section = p.split(";");
+                if (section.length !== 2) {
+                    throw new Error("section could not be split on ';'.");
                 }
-                var url = section[0].replace(/<(.*)>/, '$1').trim();
-                var name = section[1].replace(/rel="(.*)"/, '$1').trim();
+                var url = section[0].replace(/<(.*)>/, "$1").trim();
+                var name = section[1].replace(/rel="(.*)"/, "$1").trim();
                 links[name] = url;
             });
 
             if (links.last) {
                 var lastLinkparts = links.last.split("?");
-                var queryString = CommonUtilities.ParseQueryString(lastLinkparts[1]);
+                var queryString = CommonUtilities.parseQueryString(lastLinkparts[1]);
                 links.totalPages = queryString.page;
             } else {
                 // If no last property is present, the current page is the last one.
@@ -102,9 +108,11 @@ define([
 
         },
         processLinkResponse: function(xhr, currentPage) {
-            if (!xhr) return {totalPages: currentPage};
+            if (!xhr) {
+                return {totalPages: currentPage};
+            }
 
-            var requestLink = xhr.getResponseHeader('Link');
+            var requestLink = xhr.getResponseHeader("Link");
 
             return this.parseLinkHeader(requestLink, currentPage);
 
@@ -119,17 +127,23 @@ define([
 
             options.complete = function(jqXHR, textStatus) {
                 collection.processRateLimits(jqXHR);
-                if (complete) complete(jqXHR, textStatus);
+                if (complete) {
+                    complete(jqXHR, textStatus);
+                }
             };
 
             options.error = function(model, response, options) {
                 collection.processRateLimits(response);
-                if (error) error(model, response, options);
+                if (error) {
+                    error(model, response, options);
+                }
             };
 
             options.beforeSend = function(xhr) {
-                xhr.setRequestHeader('Accept', 'application/vnd.github.v3+json');
-                if (beforeSend) beforeSend(xhr);
+                xhr.setRequestHeader("Accept", "application/vnd.github.v3+json");
+                if (beforeSend) {
+                    beforeSend(xhr);
+                }
             };
 
             return Backbone.Collection.prototype.fetch.call(this, options);
@@ -177,14 +191,14 @@ define([
 
                         var queueNextFetch = function(nextPageNumber) {
                             var fetchLoader = new $.Deferred();
-                            var subsequentPageXhr = that.fetch({
+                            that.fetch({
                                 remove: false,
                                 data: { page: nextPageNumber },
-                                error: function(collection, response, options) {
+                                error: function(/*collection, response, options*/) {
                                     requestError(collection, response, options, nextPageNumber);
                                     fetchLoader.reject();
                                 },
-                                success: function(collection, response, options) {
+                                success: function(/*collection, response, options*/) {
                                     updateProgress(response, nextPageNumber);
                                     fetchLoader.resolve();
                                 }

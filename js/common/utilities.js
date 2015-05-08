@@ -1,20 +1,20 @@
-define(function() {
-    'use strict';
+define(["jquery"], function ($) {
+    "use strict";
 
     return {
-        ParseQueryString: function(str) {
-            if (typeof str !== 'string') {
+        parseQueryString: function(str) {
+            if (typeof str !== "string") {
                 return {};
             }
 
-            str = str.trim().replace(/^(\?|#)/, '');
+            str = str.trim().replace(/^(\?|#)/, "");
 
             if (!str) {
                 return {};
             }
 
-            return str.trim().split('&').reduce(function (ret, param) {
-                var parts = param.replace(/\+/g, ' ').split('=');
+            return str.trim().split("&").reduce(function (ret, param) {
+                var parts = param.replace(/\+/g, " ").split("=");
                 var key = parts[0];
                 var val = parts[1];
 
@@ -23,7 +23,7 @@ define(function() {
                 // http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
                 val = val === undefined ? null : decodeURIComponent(val);
 
-                if (key == "page") {
+                if (key === "page") {
                     if ($.isNumeric(val)) {
                         val = val * 1;
                     }
