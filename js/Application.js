@@ -6,14 +6,9 @@ define([
    "views/ApplicationLayout",
    "models/ApplicationSession"
 ], function (Backbone, Marionette, IndexRouter, IndexController, ApplicationLayout, ApplicationSession) {
-   'use strict';
+   "use strict";
 
-   var application = null;
-
-   /**
-    *
-    */
-   application = Marionette.Application.extend({
+   var Application = Marionette.Application.extend({
       initialize: function () {
 
          if (!this.options.model) {
@@ -26,13 +21,13 @@ define([
          }
 
          if (this.options.model.attributes.singleInstance) {
-            if (application.currentSingleInstance && application.currentSingleInstance.isStarted) {
+            if (Application.currentSingleInstance && Application.currentSingleInstance.isStarted) {
                throw new Error("This instance cannot be made a single instance as another single instance is already running.");
             }
 
-            application.currentSingleInstance = this;
+            Application.currentSingleInstance = this;
          } else {
-            if (application.currentSingleInstance && application.currentSingleInstance.isStarted) {
+            if (Application.currentSingleInstance && Application.currentSingleInstance.isStarted) {
                throw new Error("Another instance of this application has already been started, cannot start another.");
             }
          }
@@ -41,18 +36,20 @@ define([
 
       },
       stop: function () {
-         this.triggerMethod('before:stop');
+         this.triggerMethod("before:stop");
          this.removeApplicationLayout();
          this.stopPushState();
 
          if (this.model.attributes.singleInstance) {
-            application.currentSingleInstance = null;
+            Application.currentSingleInstance = null;
          }
 
-         this.triggerMethod('stop');
+         this.triggerMethod("stop");
       },
       removeApplicationLayout: function () {
-         if (!this.isStarted || !this.rootRegion) return;
+         if (!this.isStarted || !this.rootRegion) {
+            return;
+         }
 
          this.rootRegion.reset();
 
@@ -76,7 +73,7 @@ define([
       setupPushState: function () {
 
          if (!this.model.attributes.singleInstance) {
-            // When running more than one instance, we don't want to alter the URL as it would cause conflicts.
+            // When running more than one instance, we don"t want to alter the URL as it would cause conflicts.
             return;
          }
 
@@ -114,7 +111,7 @@ define([
     * @returns {application}
     * @constructor
     */
-   application.CreateNewInstance = function (baseContainerSelector, username, sessionToUse) {
+   Application.CreateNewInstance = function (baseContainerSelector, username, sessionToUse) {
 
       var sessionDefaults = {
          singleInstance: true
@@ -132,7 +129,7 @@ define([
          sessionToUse = new ApplicationSession(sessionDefaults);
       }
 
-      var applicationInstance = new application({model: sessionToUse});
+      var applicationInstance = new Application({model: sessionToUse});
 
       applicationInstance.start({});
 
@@ -140,12 +137,8 @@ define([
 
    };
 
-   application.currentSingleInstance = null;
+   Application.currentSingleInstance = null;
 
-   var test = function() {
-     application.CreateNewInstance();
-   };
-
-   return application;
+   return Application;
 
 });
