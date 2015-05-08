@@ -1,10 +1,10 @@
-define(["backbone"], function(Backbone) {
-    'use strict';
+define(["backbone"], function (Backbone) {
+   "use strict";
 
-    return Backbone.Model.extend({
-        defaults: {
-            message:"Sorry, an error has occoured..."
-        }
-    });
+   return Backbone.Model.extend({
+      defaults: {
+         message: "Sorry, an error has occoured..."
+      }
+   });
 
 });

@@ -132,10 +132,10 @@ define([
                 }
             };
 
-            options.error = function(model, response, options) {
+            options.error = function(model, response, errorOptions) {
                 collection.processRateLimits(response);
                 if (error) {
-                    error(model, response, options);
+                    error(model, response, errorOptions);
                 }
             };
 

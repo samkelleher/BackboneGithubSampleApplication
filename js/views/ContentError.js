@@ -1,11 +1,11 @@
-define(["marionette","templates"], function(Marionette, templates) {
-    'use strict';
+define(["marionette", "templates"], function (Marionette, templates) {
+   "use strict";
 
-    return Marionette.ItemView.extend({
-        template: templates.ContentErrorView,
-        attributes: {
-            "class":"row"
-        }
-    });
+   return Marionette.ItemView.extend({
+      template: templates.ContentErrorView,
+      attributes: {
+         "class": "row"
+      }
+   });
 
 });

@@ -1,5 +1,5 @@
 define(function() {
-    'use strict';
+    "use strict";
 
     return function(session) {
     session.set({username: "sample", preloaded: true});
