@@ -7,11 +7,11 @@ module.exports = function (grunt) {
                 options: {
                     specs: ["tests/specs/*spec.js"],
                     outfile: "tests/UnitSpecRunner.html",
-                    template: require('grunt-template-jasmine-requirejs'),
+                    template: require("grunt-template-jasmine-requirejs"),
                     templateOptions: {
-                        requireConfigFile: 'js/main.js',
+                        requireConfigFile: "js/main.js",
                         requireConfig: {
-                            baseUrl: '../js/'
+                            baseUrl: "../js/"
                         }
                     },
                     keepRunner: true,
@@ -19,14 +19,18 @@ module.exports = function (grunt) {
                 }
             },
             integration: {
-                src: "js/*.js",
                 options: {
-                    specs: "tests/integration-spec.js",
+                    specs: ["tests/specs-integration/*spec.js"],
                     outfile: "tests/IntegrationSpecRunner.html",
-                    template: "tests/SpecRunnerTemplate.html",
-                    helpers: ["tests/helpers.js"],
+                    template: require("grunt-template-jasmine-requirejs"),
+                    templateOptions: {
+                        requireConfigFile: "js/main.js",
+                        requireConfig: {
+                            baseUrl: "../js/"
+                        }
+                    },
                     keepRunner: true,
-                    vendor: ["bower_components/jquery/dist/jquery.js", "bower_components/underscore/underscore.js", "bower_components/backbone/backbone.js", "bower_components/marionette/lib/backbone.marionette.js", "bower_components/moment/moment.js"]
+                    helpers: ["tests/helpers.js"]
                 }
             }
         },
@@ -79,10 +83,10 @@ module.exports = function (grunt) {
                     ]
                 },
                 files: [
-                    'JASMINE',
-                    'JASMINE_ADAPTER',
-                    'REQUIRE',
-                    'REQUIRE_ADAPTER',
+                    "JASMINE",
+                    "JASMINE_ADAPTER",
+                    "REQUIRE",
+                    "REQUIRE_ADAPTER",
                     {pattern: "tests/specs/**/*spec.js", included: false},
                     "test/test-main.js"
                 ]
