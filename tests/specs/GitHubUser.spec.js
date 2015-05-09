@@ -8,8 +8,7 @@ define(['models/GitHubUser'], function(GitHubUser) {
         beforeEach(function() {
             gitHubUser = new GitHubUser();
 
-            // mock out a song object with a jasmine spy
-            //song = jasmine.createSpyObj('song', ['persistFavouriteStatus']);
+
         });
 
         it('Require a username to call the endpoint.', function() {
@@ -17,6 +16,45 @@ define(['models/GitHubUser'], function(GitHubUser) {
                 gitHubUser.url();
             }).toThrow(new Error("Cannot get a users profile without their username."));
 
+        });
+
+        it("Construct the endpoints URL based on username.", function() {
+            gitHubUser = new GitHubUser({login: "username"});
+            expect(gitHubUser.url()).toBe("https://api.github.com/users/username");
+        });
+
+        it("Understands rate limits.", function() {
+            gitHubUser = new GitHubUser({login: "sample"});
+
+            var spied = {
+                fakefetch: function(options) {
+
+                    if (options.complete) {
+                        options.complete({});
+                    }
+
+                    if (options.error) {
+                        options.error(gitHubUser, {});
+                    }
+
+                }};
+
+            spyOn(spied, "fakefetch").and.callThrough();
+            spyOn(Backbone.Model.prototype, "fetch").and.callFake(spied.fakefetch);
+
+            gitHubUser.fetch({
+                success:function() {
+
+                },
+                error:function() {
+
+                },
+                complete:function() {
+
+                }
+            });
+
+            expect(spied.fakefetch).toHaveBeenCalled();
         });
     });
 
