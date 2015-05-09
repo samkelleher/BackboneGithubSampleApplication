@@ -1,46 +1,109 @@
 <!doctype html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <title>Jasmine Spec Runner</title>
-    <link rel="shortcut icon" type="image/png" href="jasmine/jasmine_favicon.png" />
-    <link rel="stylesheet" type="text/css" href="jasmine/jasmine.css" />
+  <meta charset="utf-8">
+  <title>Jasmine Spec Runner</title>
 
+  
+  <link rel="stylesheet" type="text/css" href="../.grunt/grunt-contrib-jasmine/jasmine.css">
+  
+
+  
+  
+  
+
+  <script src="../.grunt/grunt-contrib-jasmine/require.js"></script>
+
+  
+  
+  <script src="../.grunt/grunt-contrib-jasmine/jasmine.js"></script>
+  
+  <script src="../.grunt/grunt-contrib-jasmine/jasmine-html.js"></script>
+  
+  <script src="../.grunt/grunt-contrib-jasmine/json2.js"></script>
+  
+  <script src="../.grunt/grunt-contrib-jasmine/boot.js"></script>
+  
+  <script src="helpers.js"></script>
+  
+  
+
+  <script>
+    require.onError = function(error) {
+      var message = error.requireType + ': ';
+      if (error.requireType === 'scripterror' || error.requireType === 'notloaded' && error.requireModules) {
+        message += 'Illegal path or script error: ' + '[\'' + error.requireModules.join("', '") + '\']';
+      } else {
+        message += error.message;
+      }
+
+      throw Error(message);
+    };
+  </script>
+
+  <script>
+    
+
+    
+      require.config({
+  "paths": {
+    "underscore": "../bower_components/underscore/underscore",
+    "backbone": "../bower_components/backbone/backbone",
+    "marionette": "../bower_components/backbone.marionette/lib/backbone.marionette",
+    "jquery": "../bower_components/jquery/dist/jquery",
+    "moment": "../bower_components/moment/moment"
+  },
+  "shim": {
+    "underscore": {
+      "exports": "_"
+    },
+    "backbone": {
+      "exports": "Backbone",
+      "deps": [
+        "jquery",
+        "underscore"
+      ]
+    },
+    "marionette": {
+      "exports": "Backbone.Marionette",
+      "deps": [
+        "backbone"
+      ]
+    }
+  },
+  "deps": [
+    "jquery",
+    "underscore"
+  ],
+  "baseUrl": "../js/"
+});
+    
+  </script>
+
+  <script>
+    // Delay onLoad function until we are ready
+    var startTests = window.onload;
+    window.onload = null;
+
+    function launchTest() {
+    require([
+      
+    ],
+    function(){
+      require(['specs/GitHubUser.spec.js','../.grunt/grunt-contrib-jasmine/reporter.js'], function(){
+        startTests();
+      });
+    }
+    )
+  }
+  </script>
+
+  
+  <script>
+  launchTest();
+  </script>
+  
 </head>
 <body>
-
-
-
-<script src="jasmine/es5-shim.js"></script>
-
-<script src="jasmine/jasmine.js"></script>
-
-<script src="jasmine/jasmine-html.js"></script>
-
-<script src="jasmine/json2.js"></script>
-
-<script src="jasmine/boot.js"></script>
-
-
-<script src="../bower_components/jquery/dist/jquery.js"></script>
-
-<script src="../bower_components/underscore/underscore.js"></script>
-
-<script src="../bower_components/backbone/backbone.js"></script>
-
-<script src="../bower_components/marionette/lib/backbone.marionette.js"></script>
-
-<script src="../bower_components/moment/moment.js"></script>
-
-<script src="helpers.js"></script>
-
-
-<script data-main="js/main.js" src="bower_components/requirejs/require.js"></script>
-
-
-<script src="unit-spec.js"></script>
-
-
-<script src="jasmine/reporter.js"></script>
 </body>
 </html>
