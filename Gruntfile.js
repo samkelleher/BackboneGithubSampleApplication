@@ -60,13 +60,14 @@ module.exports = function (grunt) {
             options: {
                 basePath: process.cwd(),
                 singleRun: true,
+                colors: true,
                 captureTimeout: 7000,
                 autoWatch: false,
                 logLevel: "ERROR",
                 reporters: ["dots", "coverage"],
                 browsers: ["PhantomJS"],
-                frameworks: ["jasmine"],
-                plugins: ["karma-jasmine", "karma-phantomjs-launcher", "karma-coverage"],
+                frameworks: ["requirejs", "jasmine"],
+                plugins: ["karma-requirejs", "karma-jasmine", "karma-phantomjs-launcher", "karma-coverage"],
                 preprocessors: {
                     "js/*.js": "coverage"
                 },
@@ -78,13 +79,12 @@ module.exports = function (grunt) {
                     ]
                 },
                 files: [
-                    "bower_components/jquery/dist/jquery.js",
-                    "bower_components/underscore/underscore.js",
-                    "bower_components/backbone/backbone.js",
-                    "bower_components/backbone.marionette/lib/backbone.marionette.js",
-                    "bower_components/moment/moment.js",
-                    "tests/helpers.js",
-                    "tests/unit-spec.js"
+                    'JASMINE',
+                    'JASMINE_ADAPTER',
+                    'REQUIRE',
+                    'REQUIRE_ADAPTER',
+                    {pattern: "tests/specs/**/*spec.js", included: false},
+                    "test/test-main.js"
                 ]
             },
             run: {
