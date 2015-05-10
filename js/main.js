@@ -23,7 +23,7 @@ require.config({
 });
 
 require([
-   "application"
+   "Application"
 ], function (Application) {
    "use strict";
    
