@@ -5,7 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/samkelleher/BackboneGithubSampleApplication/badge.svg?branch=gh-pages)](https://coveralls.io/r/samkelleher/BackboneGithubSampleApplication?branch=gh-pages)
 [![Codacy Badge](https://www.codacy.com/project/badge/3284cecf47a3441fb408173ad1f0fbd9)](https://www.codacy.com/app/sk/BackboneGithubSampleApplication)
 
-![Screenshot](/../screenshots/screenshot.PNG?raw=true "Backbone + Marionette GitHub Profile Sample")
+![Screenshot](/../screenshots/screenshot2.PNG?raw=true "Backbone + Marionette GitHub Profile Sample")
 
 ### Demo
 
