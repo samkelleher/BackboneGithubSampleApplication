@@ -68,13 +68,13 @@ module.exports = function (grunt) {
                 captureTimeout: 7000,
                 autoWatch: false,
                 captureConsole: true,
-                logLevel: 'DEBUG',
+                logLevel: 'WARN',
                 reporters: ['dots', 'coverage'],
                 browsers: ['PhantomJS'],
                 frameworks: ['requirejs', 'jasmine'],
                 plugins: ['karma-requirejs', 'karma-jasmine', 'karma-phantomjs-launcher', 'karma-coverage'],
                 preprocessors: {
-                    'js/*.js': 'coverage'
+                    'js/**/*.js': 'coverage'
                 },
                 coverageReporter: {
                     dir: 'tests/coverage',
