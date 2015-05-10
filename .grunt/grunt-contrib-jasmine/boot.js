@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2008-2015 Pivotal Labs
+Copyright (c) 2008-2014 Pivotal Labs
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -84,8 +84,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    */
   var htmlReporter = new jasmine.HtmlReporter({
     env: env,
-    onRaiseExceptionsClick: function() { queryString.navigateWithNewParam("catch", !env.catchingExceptions()); },
-    addToExistingQueryString: function(key, value) { return queryString.fullStringWithNewParam(key, value); },
+    onRaiseExceptionsClick: function() { queryString.setParam("catch", !env.catchingExceptions()); },
     getContainer: function() { return document.body; },
     createElement: function() { return document.createElement.apply(document, arguments); },
     createTextNode: function() { return document.createTextNode.apply(document, arguments); },

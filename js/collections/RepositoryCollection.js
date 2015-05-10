@@ -1,10 +1,10 @@
 define([
     "backbone",
     "models/Repository",
-    "common/utilities",
+    "common/Utilities",
     "underscore",
     "jquery"
-], function(Backbone, Repository, CommonUtilities, _, $) {
+], function(Backbone, Repository, Utilities, _, $) {
     "use strict";
 
     return Backbone.Collection.extend({
@@ -97,7 +97,7 @@ define([
 
             if (links.last) {
                 var lastLinkparts = links.last.split("?");
-                var queryString = CommonUtilities.parseQueryString(lastLinkparts[1]);
+                var queryString = Utilities.parseQueryString(lastLinkparts[1]);
                 links.totalPages = queryString.page;
             } else {
                 // If no last property is present, the current page is the last one.

@@ -1,61 +1,61 @@
 module.exports = function (grunt) {
 
     grunt.initConfig({
-        pkg: grunt.file.readJSON("package.json"),
+        pkg: grunt.file.readJSON('package.json'),
         jasmine: {
             unit: {
                 options: {
-                    specs: ["tests/specs/*spec.js"],
-                    outfile: "tests/UnitSpecRunner.html",
-                    template: require("grunt-template-jasmine-requirejs"),
+                    specs: ['tests/specs/*spec.js'],
+                    outfile: 'tests/UnitSpecRunner.html',
+                    template: require('grunt-template-jasmine-requirejs'),
                     templateOptions: {
-                        requireConfigFile: "js/main.js",
+                        requireConfigFile: 'js/main.js',
                         requireConfig: {
-                            baseUrl: "../js/"
+                            baseUrl: '../js/'
                         }
                     },
                     keepRunner: true,
-                    helpers: ["tests/helpers.js"]
+                    helpers: ['tests/helpers.js']
                 }
             },
             integration: {
                 options: {
-                    specs: ["tests/specs-integration/*spec.js"],
-                    outfile: "tests/IntegrationSpecRunner.html",
-                    template: require("grunt-template-jasmine-requirejs"),
+                    specs: ['tests/specs-integration/*spec.js'],
+                    outfile: 'tests/IntegrationSpecRunner.html',
+                    template: require('grunt-template-jasmine-requirejs'),
                     templateOptions: {
-                        requireConfigFile: "js/main.js",
+                        requireConfigFile: 'js/main.js',
                         requireConfig: {
-                            baseUrl: "../js/"
+                            baseUrl: '../js/'
                         }
                     },
                     keepRunner: true,
-                    helpers: ["tests/helpers.js"]
+                    helpers: ['tests/helpers.js']
                 }
             }
         },
         clean: {
-            dist: ["dist/*.*"],
-            docco: ["docs/docco/*"]
+            dist: ['dist/*.*'],
+            docco: ['docs/docco/*']
         },
         copy: {
             main: {
                 files: [
                     {
-                        src: [".grunt/grunt-contrib-jasmine/*"],
-                        dest: "tests/jasmine/",
+                        src: ['.grunt/grunt-contrib-jasmine/*'],
+                        dest: 'tests/jasmine/',
                         flatten: true,
-                        filter: "isFile",
+                        filter: 'isFile',
                         expand: true
                     },
-                    {src: "css/favicon.ico", dest: "dist/favicon.ico"},
+                    {src: 'css/favicon.ico', dest: 'dist/favicon.ico'},
                     {
                         src: [
-                            "bower_components/octicons/octicons/octicons.eot",
-                            "bower_components/octicons/octicons/octicons.woff",
-                            "bower_components/octicons/octicons/octicons.ttf",
-                            "bower_components/octicons/octicons/octicons.svg"
-                        ], dest: "dist", filter: "isFile", flatten: true, expand: true
+                            'bower_components/octicons/octicons/octicons.eot',
+                            'bower_components/octicons/octicons/octicons.woff',
+                            'bower_components/octicons/octicons/octicons.ttf',
+                            'bower_components/octicons/octicons/octicons.svg'
+                        ], dest: 'dist', filter: 'isFile', flatten: true, expand: true
                     }
                 ]
             }
@@ -67,28 +67,27 @@ module.exports = function (grunt) {
                 colors: true,
                 captureTimeout: 7000,
                 autoWatch: false,
-                logLevel: "ERROR",
-                reporters: ["dots", "coverage"],
-                browsers: ["PhantomJS"],
-                frameworks: ["requirejs", "jasmine"],
-                plugins: ["karma-requirejs", "karma-jasmine", "karma-phantomjs-launcher", "karma-coverage"],
+                captureConsole: true,
+                logLevel: 'DEBUG',
+                reporters: ['dots', 'coverage'],
+                browsers: ['PhantomJS'],
+                frameworks: ['requirejs', 'jasmine'],
+                plugins: ['karma-requirejs', 'karma-jasmine', 'karma-phantomjs-launcher', 'karma-coverage'],
                 preprocessors: {
-                    "js/*.js": "coverage"
+                    'js/*.js': 'coverage'
                 },
                 coverageReporter: {
-                    dir: "tests/coverage",
+                    dir: 'tests/coverage',
                     reporters: [
-                        {type: "html", subdir: "report-html"},
-                        {type: "lcovonly", subdir: "report-lcov"}
+                        {type: 'html', subdir: 'report-html'},
+                        {type: 'lcovonly', subdir: 'report-lcov'}
                     ]
                 },
                 files: [
-                    "JASMINE",
-                    "JASMINE_ADAPTER",
-                    "REQUIRE",
-                    "REQUIRE_ADAPTER",
-                    {pattern: "tests/specs/**/*spec.js", included: false},
-                    "test/test-main.js"
+                    {pattern: 'bower_components/**/*.js', included: false},
+                    {pattern: 'js/**/*.js', included: false},
+                    {pattern: 'tests/specs/**/*spec.js', included: false},
+                    {pattern: 'tests/test-main.js', included: true}
                 ]
             },
             run: {
@@ -99,40 +98,40 @@ module.exports = function (grunt) {
         },
         coveralls: {
             options: {
-                coverageDir: "tests/coverage/report-lcov"
+                coverageDir: 'tests/coverage/report-lcov'
             }
         },
         cssmin: {
             target: {
                 files: {
-                    "dist/app.min.css": ["bower_components/octicons/octicons/octicons.css", "css/grid.css", "css/app.css"]
+                    'dist/app.min.css': ['bower_components/octicons/octicons/octicons.css', 'css/grid.css', 'css/app.css']
                 }
             }
         },
         jst: {
             compile: {
                 files: {
-                    "js/templates.js": ["views/*.html"]
+                    'js/templates.js': ['views/*.html']
                 },
                 options: {
-                    namespace: "templates",
+                    namespace: 'templates',
                     amd: true,
                     processName: function (filepath) {
                         return filepath.substring(6, filepath.length - 5);
                     },
                     processContent: function (src) {
-                        return src.replace(/\r?\n|\r/gm, "").replace(/\s{2,}/gm, " ").replace(/>\s+</gm, "><");
+                        return src.replace(/\r?\n|\r/gm, '').replace(/\s{2,}/gm, ' ').replace(/>\s+</gm, '><');
                     },
                     templateSettings: {
-                        variable: "model"
+                        variable: 'model'
                     }
                 }
             }
         },
         watch: {
             templates: {
-                files: ["views/*.html"],
-                tasks: ["jst"],
+                files: ['views/*.html'],
+                tasks: ['jst'],
                 options: {
                     interrupt: true
                 }
@@ -144,54 +143,54 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    "dist/index.html": ["index.html"]
+                    'dist/index.html': ['index.html']
                 }
             }
         },
         docco: {
             debug: {
-                src: ["js/models.js",
-                    "js/app.js",
-                    "js/views.js"],
+                src: ['js/models.js',
+                    'js/app.js',
+                    'js/views.js'],
                 options: {
-                    output: "docs/docco/"
+                    output: 'docs/docco/'
                 }
             }
         },
         requirejs: {
             compile: {
                 options: {
-                    mainConfigFile: "js/main.js",
+                    mainConfigFile: 'js/main.js',
                     logLevel: 1,
                     preserveLicenseComments: false,
-                    include: ["main"],
-                    name: "../node_modules/almond/almond",
-                    out: "dist/app.min.js"
+                    include: ['main'],
+                    name: '../node_modules/almond/almond',
+                    out: 'dist/app.min.js'
                 }
             }
         }
     });
 
-    grunt.loadNpmTasks("grunt-contrib-clean");
-    grunt.loadNpmTasks("grunt-contrib-jasmine");
-    grunt.loadNpmTasks("grunt-contrib-copy");
-    grunt.loadNpmTasks("grunt-contrib-cssmin");
-    grunt.loadNpmTasks("grunt-contrib-jst");
-    grunt.loadNpmTasks("grunt-contrib-watch");
-    grunt.loadNpmTasks("grunt-karma-coveralls");
-    grunt.loadNpmTasks("grunt-karma");
-    grunt.loadNpmTasks("grunt-processhtml");
-    grunt.loadNpmTasks("grunt-docco");
-    grunt.loadNpmTasks("grunt-contrib-requirejs");
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-jst');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-karma-coveralls');
+    grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-processhtml');
+    grunt.loadNpmTasks('grunt-docco');
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
 
-    grunt.registerTask("test", ["karma:run", "coveralls"]);
+    grunt.registerTask('test', ['karma:run', 'coveralls']);
 
-    grunt.registerTask("coverage", ["coveralls"]);
+    grunt.registerTask('coverage', ['coveralls']);
 
-    grunt.registerTask("integration", ["jasmine:integration"]);
+    grunt.registerTask('integration', ['jasmine:integration']);
 
-    grunt.registerTask("build", ["clean:dist", "requirejs", "cssmin", "copy", "processhtml:dist"]);
+    grunt.registerTask('build', ['clean:dist', 'requirejs', 'cssmin', 'copy', 'processhtml:dist']);
 
-    grunt.registerTask("default", ["build", "test"]);
+    grunt.registerTask('default', ['build', 'test']);
 
 };

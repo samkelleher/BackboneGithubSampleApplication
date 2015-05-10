@@ -1,6 +1,6 @@
 'use strict';
 
-define(['controllers/Index'], function(GlobalController) {
+define(['controllers/GlobalController'], function(GlobalController) {
 
     describe('GlobalController', function() {
 

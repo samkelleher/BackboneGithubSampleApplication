@@ -2,7 +2,7 @@ define([
    "backbone",
    "marionette",
    "routers/index",
-   "controllers/index",
+   "controllers/GlobalController",
    "views/ApplicationLayout",
    "models/ApplicationSession"
 ], function (Backbone, Marionette, IndexRouter, IndexController, ApplicationLayout, ApplicationSession) {
