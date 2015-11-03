@@ -1,6 +1,6 @@
 {
   "name": "BackboneGithubSampleApplication",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A sample Backbone application to display GitHub Repository of a given user.",
   "main": "index.html",
   "directories": {
@@ -23,6 +23,10 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/samkelleher/BackboneGithubSampleApplication/issues"
+  },
+  "engines": {
+    "node": ">=5",
+    "npm": ">=3"
   },
   "homepage": "https://github.com/samkelleher/BackboneGithubSampleApplication",
   "devDependencies": {
