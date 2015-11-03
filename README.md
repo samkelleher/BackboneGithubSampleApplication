@@ -33,7 +33,7 @@ Both Grunt and Bower can installed automatically by running the `npm install` co
 
 You can run the full unminified version by just opening the root [index.html](index.html). There is also a [/dist/](dist) directory that contains the [full compiled version](dist/index.html) (minified css/js etc), this directory contains all the files needed to run the application.
 
-To regenerate this directory run `npm run build`.
+To regenerate this directory run `grunt build`.
 
 The debug template also always uses pre-compiled view templates from the auto-generated [js/templates.js](js/templates.js). The content of this file consists of all the un-compiled html views that are found in the [/views/](views) folder.
 
@@ -42,7 +42,7 @@ You can manually force a template compilation by running `grunt jst`. Alternativ
 ### Testing
 Unit and Integration tests can be performed separately. By default, only unit tests are performed.
 
-Run `npm test` to execute unit tests using [Jasmine](https://github.com/jasmine/jasmine) inside a [PhantomJS](http://phantomjs.org/) instance.
+Run `grunt test` (same as running `npm test`) to execute unit tests using [Jasmine](https://github.com/jasmine/jasmine) inside a [PhantomJS](http://phantomjs.org/) instance.
 
 Run `grunt integration` to perform a slower integration test only; which will actually connect to the live APIs used by this application.
 
