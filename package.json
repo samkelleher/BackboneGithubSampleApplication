@@ -8,8 +8,12 @@
   },
   "scripts": {
     "test": "grunt test",
+    "integration": "grunt integration",
     "build": "grunt build",
-    "bower": "bower install"
+    "build:jst": "grunt jst",
+    "bower": "bower install",
+    "bower:update": "bower update",
+    "watch": "grunt watch"
   },
   "repository": {
     "type": "git",

@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-define(["collections/RepositoryCollection", "moment"], function (RepositoryCollection, moment) {
+define(['collections/RepositoryCollection', 'moment'], function (RepositoryCollection, moment) {
 
-   describe("RepositoryCollection (Integration).", function () {
+   describe('RepositoryCollection (Integration).', function () {
 
       var originalTimeout;
       beforeEach(function () {
@@ -11,11 +11,11 @@ define(["collections/RepositoryCollection", "moment"], function (RepositoryColle
          jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
       });
 
-      it("Will download the list of repositories for a user from github API.", function (done) {
+      it('Will download the list of repositories for a user from github API.', function (done) {
          var repos = new RepositoryCollection([], {
             gitHubUser: {
                get: function () {
-                  return "github";
+                  return 'github';
                }
             }
          });
@@ -29,8 +29,8 @@ define(["collections/RepositoryCollection", "moment"], function (RepositoryColle
             }
          };
 
-         spyOn(fetchCompleteFunctions, "success");
-         spyOn(fetchCompleteFunctions, "error");
+         spyOn(fetchCompleteFunctions, 'success');
+         spyOn(fetchCompleteFunctions, 'error');
 
          var completeFetch = function () {
             expect(fetchCompleteFunctions.success).toHaveBeenCalled();
@@ -51,8 +51,8 @@ define(["collections/RepositoryCollection", "moment"], function (RepositoryColle
 
       });
 
-      it("Will handle a username that does not exist.", function (done) {
-         var dummyUsername = moment().format("x");
+      it('Will handle a username that does not exist.', function (done) {
+         var dummyUsername = moment().format('x');
          var repos = new RepositoryCollection([], {
             gitHubUser: {
                get: function () {
@@ -70,8 +70,8 @@ define(["collections/RepositoryCollection", "moment"], function (RepositoryColle
             }
          };
 
-         spyOn(fetchCompleteFunctions, "success");
-         spyOn(fetchCompleteFunctions, "error");
+         spyOn(fetchCompleteFunctions, 'success');
+         spyOn(fetchCompleteFunctions, 'error');
 
          var completeFetch = function () {
             expect(fetchCompleteFunctions.success).not.toHaveBeenCalled();
