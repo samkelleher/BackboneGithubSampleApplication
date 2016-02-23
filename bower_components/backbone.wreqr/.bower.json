@@ -1,6 +1,6 @@
 {
   "name": "backbone.wreqr",
-  "version": "1.3.2",
+  "version": "1.3.5",
   "homepage": "https://github.com/marionettejs/backbone.wreqr",
   "authors": [
     "Derick Bailey"
@@ -15,8 +15,8 @@
     "model"
   ],
   "dependencies": {
-    "backbone": ">=0.9.9 <=1.1.2",
-    "underscore": ">=1.3.3 <=1.7.0"
+    "backbone": ">=0.9.9 <=1.2.3",
+    "underscore": ">=1.3.3 <=1.8.3"
   },
   "devDependencies": {
     "grunt": "0.4.0",
@@ -36,13 +36,21 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "public",
+    "specs",
+    ".gitignore",
+    ".jshintrc",
+    ".travis.yml",
+    "Gruntfile.js",
+    "component.json",
+    "package.json"
   ],
-  "_release": "1.3.2",
+  "_release": "1.3.5",
   "_resolution": {
     "type": "version",
-    "tag": "v1.3.2",
-    "commit": "ce146daac2a5a44d0874f353061253199007bd62"
+    "tag": "v1.3.5",
+    "commit": "e28d5e489e106812b46d8d2e86de977c60cb4cc6"
   },
   "_source": "git://github.com/marionettejs/backbone.wreqr.git",
   "_target": "^1.0.0",
