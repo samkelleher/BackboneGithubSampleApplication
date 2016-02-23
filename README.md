@@ -9,7 +9,7 @@
 
 ### Demo
 
-Run the included [index.html](index.html) locally or [run the hosted distributable example](https://samkelleher.github.io/BackboneGithubSampleApplication/dist/index.html).
+Run the included [index.html](index.html) locally or [run the hosted distributable example](https://samkelleher.github.io/BackboneGithubSampleApplication/dist/index.html). You can run `npm start` once you have built the project to start a small webserver and open the demo in your browser automatically.
 
 ### Setup Locally
 

@@ -88,13 +88,11 @@ define(['models/RepositoryLanguageDetails'], function(RepositoryLanguageDetails)
         });
 
         it("Generates a API url.", function() {
-            var languageDetails = new RepositoryLanguageDetails();
+            var languageDetails = new RepositoryLanguageDetails({id: 1});
 
             expect(function(){
                 return languageDetails.url();
             } ).toThrow();
-
-            languageDetails.id = 1;
 
             expect(function(){
                 return languageDetails.url();
