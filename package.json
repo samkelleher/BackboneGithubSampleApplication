@@ -9,10 +9,12 @@
   "scripts": {
     "start": "http-server -o -c-1 -s",
     "test": "grunt test",
+    "test:browser": "http-server . -c-1 --cors -o -s -i false",
     "integration": "grunt integration",
     "build": "grunt build",
     "build:jst": "grunt jst",
-    "bower": "bower install",
+    "bower": "bower",
+    "bower:install": "bower install",
     "bower:update": "bower update --force-latest --save",
     "watch": "grunt watch"
   },
