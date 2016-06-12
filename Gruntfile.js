@@ -185,7 +185,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-docco');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
 
-    grunt.registerTask('test', ['karma:run', 'coveralls']);
+    grunt.registerTask('test', ['karma:run']);
 
     grunt.registerTask('coverage', ['coveralls']);
 
