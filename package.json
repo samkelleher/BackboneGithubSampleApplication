@@ -1,6 +1,6 @@
 {
   "name": "BackboneGithubSampleApplication",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A sample Backbone application to display GitHub Repository of a given user.",
   "main": "index.html",
   "directories": {
@@ -32,7 +32,7 @@
     "url": "https://github.com/samkelleher/BackboneGithubSampleApplication/issues"
   },
   "engines": {
-    "node": ">=5",
+    "node": ">=6",
     "npm": ">=3"
   },
   "homepage": "https://github.com/samkelleher/BackboneGithubSampleApplication",
